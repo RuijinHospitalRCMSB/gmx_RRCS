@@ -1,0 +1,39 @@
+
+# This document provides a detailed record of the calculation results of the 
+# Residue-Residue Contact Score (RRCS) from GROMACS trajectories. RRCS is a 
+# quantitative metric used to describe the interactions between residues within 
+# a protein, specifically reflecting the degree of proximity between residues 
+# in three-dimensional space. This metric is crucial for understanding the 
+# dynamic changes in protein structures and their functional realization.
+
+# Columns:
+# - Frame: Indicates the frame index in the GROMACS simulation trajectory.
+# - Residue1: Lists the identifier of the first residue involved in the RRCS calculation.
+# - Residue2: Lists the identifier of the second residue involved in the RRCS calculation.
+# - RRCS: Displays the RRCS calculation score for the corresponding residue pair.
+
+# Note: For a comprehensive understanding of RRCS theory and its critical applications 
+# in protein structure analysis, please refer to our research published in 
+# eLife, "Common activation mechanism of class A GPCRs." This study explains 
+# the principles of RRCS and demonstrates its use in revealing the activation 
+# mechanisms of class A GPCRs.
+
+
+
+Frame  Residue1  Residue2  RRCS                
+1      A:1K      A:2V      0                   
+1      A:1K      A:3F      1.9388403620038708  
+1      A:1K      A:4G      0                   
+1      A:1K      A:5R      0                   
+1      A:1K      A:13K     0                   
+1      A:1K      A:16G     0                   
+1      A:23Y     A:24S     0                   
+1      A:23Y     A:25L     0                   
+1      A:23Y     A:26G     0                   
+1      A:23Y     A:27N     0.817897592272077   
+1      A:24S     A:25L     0                   
+1      A:24S     A:26G     0                   
+1      A:24S     A:27N     0.990668031147548   
+1      A:25L     A:26G     0                   
+1      A:25L     A:27N     0                   
+1      A:26G     A:27N     0                   

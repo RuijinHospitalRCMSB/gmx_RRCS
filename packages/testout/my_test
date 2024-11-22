@@ -1,0 +1,199 @@
+
+# This document provides a detailed record of the calculation results of the 
+# Residue-Residue Contact Score (RRCS) from GROMACS trajectories. RRCS is a 
+# quantitative metric used to describe the interactions between residues within 
+# a protein, specifically reflecting the degree of proximity between residues 
+# in three-dimensional space. This metric is crucial for understanding the 
+# dynamic changes in protein structures and their functional realization.
+
+# Columns:
+# - Frame: Indicates the frame index in the GROMACS simulation trajectory.
+# - Residue1: Lists the identifier of the first residue involved in the RRCS calculation.
+# - Residue2: Lists the identifier of the second residue involved in the RRCS calculation.
+# - RRCS: Displays the RRCS calculation score for the corresponding residue pair.
+
+# Note: For a comprehensive understanding of RRCS theory and its critical applications 
+# in protein structure analysis, please refer to our research published in 
+# eLife, "Common activation mechanism of class A GPCRs." This study explains 
+# the principles of RRCS and demonstrates its use in revealing the activation 
+# mechanisms of class A GPCRs.
+
+
+
+Frame  Residue1  Residue2  RRCS                 
+1      A:1K      A:2V      0                    
+1      A:1K      A:3F      1.938820607321602    
+1      A:1K      A:4G      0                    
+1      A:1K      A:5R      0                    
+1      A:1K      A:13K     0                    
+1      A:1K      A:16G     0                    
+1      A:23Y     A:24S     0                    
+1      A:23Y     A:25L     0                    
+1      A:23Y     A:26G     0                    
+1      A:23Y     A:27N     0.8178958892822262   
+1      A:24S     A:25L     0                    
+1      A:24S     A:26G     0                    
+1      A:24S     A:27N     0.9906649657658168   
+1      A:25L     A:26G     0                    
+1      A:25L     A:27N     0                    
+1      A:26G     A:27N     0                    
+2      A:1K      A:2V      0.0                  
+2      A:1K      A:3F      0.20570977074759333  
+2      A:1K      A:4G      0                    
+2      A:1K      A:5R      0                    
+2      A:1K      A:13K     0                    
+2      A:1K      A:16G     0                    
+2      A:23Y     A:24S     0                    
+2      A:23Y     A:25L     0                    
+2      A:23Y     A:26G     0                    
+2      A:23Y     A:27N     0.46723495210920024  
+2      A:24S     A:25L     0.0                  
+2      A:24S     A:26G     0                    
+2      A:24S     A:27N     0.6794937201908656   
+2      A:25L     A:26G     0                    
+2      A:25L     A:27N     0                    
+2      A:26G     A:27N     0                    
+3      A:1K      A:2V      0                    
+3      A:1K      A:3F      7.336462027685982    
+3      A:1K      A:4G      0                    
+3      A:1K      A:5R      0                    
+3      A:1K      A:13K     0                    
+3      A:1K      A:16G     0                    
+3      A:23Y     A:24S     0                    
+3      A:23Y     A:25L     0                    
+3      A:23Y     A:26G     0                    
+3      A:23Y     A:27N     0.07978771754673541  
+3      A:24S     A:25L     0                    
+3      A:24S     A:26G     0                    
+3      A:24S     A:27N     0.4214551653180803   
+3      A:25L     A:26G     0                    
+3      A:25L     A:27N     0                    
+3      A:26G     A:27N     0                    
+4      A:1K      A:2V      0.0                  
+4      A:1K      A:3F      3.952650301797049    
+4      A:1K      A:4G      0                    
+4      A:1K      A:5R      0                    
+4      A:1K      A:13K     0                    
+4      A:1K      A:16G     0                    
+4      A:23Y     A:24S     0                    
+4      A:23Y     A:25L     0                    
+4      A:23Y     A:26G     0                    
+4      A:23Y     A:27N     1.261013167245047    
+4      A:24S     A:25L     0.0                  
+4      A:24S     A:26G     0                    
+4      A:24S     A:27N     0.912845652444022    
+4      A:25L     A:26G     0                    
+4      A:25L     A:27N     0                    
+4      A:26G     A:27N     0                    
+5      A:1K      A:2V      0.0                  
+5      A:1K      A:3F      5.8140574727739605   
+5      A:1K      A:4G      0                    
+5      A:1K      A:5R      0                    
+5      A:1K      A:13K     0                    
+5      A:1K      A:16G     0                    
+5      A:23Y     A:24S     0                    
+5      A:23Y     A:25L     0                    
+5      A:23Y     A:26G     0                    
+5      A:23Y     A:27N     0.6171695845467701   
+5      A:24S     A:25L     0.0                  
+5      A:24S     A:26G     0                    
+5      A:24S     A:27N     1.607437583378383    
+5      A:25L     A:26G     0                    
+5      A:25L     A:27N     0                    
+5      A:26G     A:27N     0                    
+6      A:1K      A:2V      0.0                  
+6      A:1K      A:3F      4.423298025131225    
+6      A:1K      A:4G      0                    
+6      A:1K      A:5R      0                    
+6      A:1K      A:13K     0                    
+6      A:1K      A:16G     0                    
+6      A:23Y     A:24S     0                    
+6      A:23Y     A:25L     0                    
+6      A:23Y     A:26G     0                    
+6      A:23Y     A:27N     4.77083567891802     
+6      A:24S     A:25L     0                    
+6      A:24S     A:26G     0                    
+6      A:24S     A:27N     0.597157996041434    
+6      A:25L     A:26G     0                    
+6      A:25L     A:27N     0                    
+6      A:26G     A:27N     0                    
+7      A:1K      A:2V      0.0                  
+7      A:1K      A:3F      2.391677618026733    
+7      A:1K      A:4G      0                    
+7      A:1K      A:5R      0                    
+7      A:1K      A:13K     0                    
+7      A:1K      A:16G     0                    
+7      A:23Y     A:24S     0                    
+7      A:23Y     A:25L     0                    
+7      A:23Y     A:26G     0                    
+7      A:23Y     A:27N     0.655593463352748    
+7      A:24S     A:25L     0.0                  
+7      A:24S     A:26G     0                    
+7      A:24S     A:27N     1.8274587631225585   
+7      A:25L     A:26G     0                    
+7      A:25L     A:27N     0                    
+7      A:26G     A:27N     0                    
+8      A:1K      A:2V      0                    
+8      A:1K      A:3F      3.8457126685551226   
+8      A:1K      A:4G      0                    
+8      A:1K      A:5R      0                    
+8      A:1K      A:13K     0                    
+8      A:1K      A:16G     0                    
+8      A:23Y     A:24S     0                    
+8      A:23Y     A:25L     0                    
+8      A:23Y     A:26G     0                    
+8      A:23Y     A:27N     0.3619250297546385   
+8      A:24S     A:25L     0.0                  
+8      A:24S     A:26G     0                    
+8      A:24S     A:27N     1.0150626795632498   
+8      A:25L     A:26G     0                    
+8      A:25L     A:27N     0                    
+8      A:26G     A:27N     0                    
+9      A:1K      A:2V      0.0                  
+9      A:1K      A:3F      6.715392180851526    
+9      A:1K      A:4G      0                    
+9      A:1K      A:5R      0                    
+9      A:1K      A:13K     0                    
+9      A:1K      A:16G     0                    
+9      A:23Y     A:24S     0                    
+9      A:23Y     A:25L     0                    
+9      A:23Y     A:26G     0                    
+9      A:23Y     A:27N     2.2515891551971428   
+9      A:24S     A:25L     0                    
+9      A:24S     A:26G     0                    
+9      A:24S     A:27N     0.6546413081032889   
+9      A:25L     A:26G     0                    
+9      A:25L     A:27N     0                    
+9      A:26G     A:27N     0                    
+10     A:1K      A:2V      0.0                  
+10     A:1K      A:3F      5.921448101316179    
+10     A:1K      A:4G      0                    
+10     A:1K      A:5R      0                    
+10     A:1K      A:13K     0                    
+10     A:1K      A:16G     0                    
+10     A:23Y     A:24S     0                    
+10     A:23Y     A:25L     0                    
+10     A:23Y     A:26G     0                    
+10     A:23Y     A:27N     2.0944570064544674   
+10     A:24S     A:25L     0                    
+10     A:24S     A:26G     0                    
+10     A:24S     A:27N     1.3092355319431848   
+10     A:25L     A:26G     0                    
+10     A:25L     A:27N     0                    
+10     A:26G     A:27N     0                    
+11     A:1K      A:2V      0.0                  
+11     A:1K      A:3F      6.243270438058035    
+11     A:1K      A:4G      0                    
+11     A:1K      A:5R      0                    
+11     A:1K      A:13K     0                    
+11     A:1K      A:16G     0                    
+11     A:23Y     A:24S     0                    
+11     A:23Y     A:25L     0                    
+11     A:23Y     A:26G     0                    
+11     A:23Y     A:27N     1.58876906803676     
+11     A:24S     A:25L     0                    
+11     A:24S     A:26G     0                    
+11     A:24S     A:27N     1.6635180609566822   
+11     A:25L     A:26G     0                    
+11     A:25L     A:27N     0                    
+11     A:26G     A:27N     0                    
