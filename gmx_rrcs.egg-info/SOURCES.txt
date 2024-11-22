@@ -1,0 +1,16 @@
+LICENSE
+README.md
+setup.py
+gmx_rrcs.egg-info/PKG-INFO
+gmx_rrcs.egg-info/SOURCES.txt
+gmx_rrcs.egg-info/dependency_links.txt
+gmx_rrcs.egg-info/entry_points.txt
+gmx_rrcs.egg-info/requires.txt
+gmx_rrcs.egg-info/top_level.txt
+packages/__init__.py
+packages/constants.py
+packages/gmx_rrcs.py
+packages/gmxout2csv.py
+packages/utilities.py
+tests/test.py
+tests/test_chardet.py
