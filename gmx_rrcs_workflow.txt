@@ -1,0 +1,73 @@
++----------------------------------------+
+|               Start                    |
+|----------------------------------------|
+| 1. Import Dependencies                 |
+|    - file operations                   |
+|    - logging                           |
+|    - performance measurement           |
+|    - scientific computing              |
+|    - data visualization                |
++------------------+---------------------+
+                      |
+                      v
++----------------------------------------+
+| 2. Configure Logging                   |
+|    - Set basic logging configuration   |
++------------------+---------------------+
+                      |
+                      v
++----------------------------------------+
+| 3. Parse Command-Line Arguments        |
+|    - ConfigParser class                |
+|    - Required and optional parameters  |
++------------------+---------------------+
+                      |
+                      v
++----------------------------------------+
+| 4. Custom Exceptions                   |
+|    - Define specific error handling    |
++------------------+---------------------+
+                      |
+                      v
++----------------------------------------+
+| 5. Generate Residue Pairs              |
+|    - ResidueCombinePairs class         |
+|    - Read residue index file           |
+|    - Parse and combine residue pairs   |
++------------------+---------------------+
+                      |
+                      v
++----------------------------------------+
+| 6. Initialize MD Universe              |
+|    - UniverseInitializer class         |
+|    - Check file existence              |
+|    - Set time intervals                |
++------------------+---------------------+
+                      |
+                      v
++----------------------------------------+
+| 7. Analyze Residue Contacts            |
+|    - ResidueContactAnalyzer class      |
+|    - Compute RRCS                      |
++------------------+---------------------+
+                      |
+                      v
++----------------------------------------+
+| 8. Visualize Data                      |
+|    - DataVisualizer class              |
+|    - Write results to file             |
+|    - Generate scatter plots            |
+|    - Generate violin plots             |
++------------------+---------------------+
+                      |
+                      v
++----------------------------------------+
+| 9. Main Function                       |
+|    - Initialize and invoke methods     |
+|    - Measure total execution time      |
++------------------+---------------------+
+                      |
+                      v
++----------------------------------------+
+|               End                      |
++----------------------------------------+
