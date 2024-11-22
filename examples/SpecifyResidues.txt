@@ -1,0 +1,2 @@
+1 $ 2-5 13 16 ; This indicates the calculation of rrcs between residue 1 and residues 2-5, 13, and 16. The residue number before the "$" can only one.
+23-27         ; If there is no "$", then it means calculating the rrcs between each residue pair indicated by the data in this row.
