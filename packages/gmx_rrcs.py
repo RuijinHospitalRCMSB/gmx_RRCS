@@ -20,24 +20,26 @@ from MDAnalysis import Universe
 from concurrent.futures import wait, ALL_COMPLETED
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-try:
-    # Attempt to import modules from a subdirectory named 'packages' within the current directory.
-    from packages.utilities import *
-    from packages.constants import *
-except:
-    try:
-        # If the initial import fails (likely due to differing working directories), 
-        # attempt to import using a relative path.
-        from .utilities import *
-        from .constants import *
-    except:
-        # If importing with a relative path also fails, 
-        # attempt to import directly from the current directory.
-        from utilities import *
-        from constants import *
-finally:
-    from utilities import *
-    from constants import *
+from packages.utilities import *
+from packages.constants import *
+# try:
+#     # Attempt to import modules from a subdirectory named 'packages' within the current directory.
+#     from packages.utilities import *
+#     from packages.constants import *
+# except:
+#     try:
+#         # If the initial import fails (likely due to differing working directories), 
+#         # attempt to import using a relative path.
+#         from .utilities import *
+#         from .constants import *
+#     except:
+#         # If importing with a relative path also fails, 
+#         # attempt to import directly from the current directory.
+#         from utilities import *
+#         from constants import *
+# finally:
+#     from utilities import *
+#     from constants import *
 
 
 # configure logging

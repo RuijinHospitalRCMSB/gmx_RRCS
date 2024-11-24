@@ -5,18 +5,19 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-try:
-    # Attempt to import modules from a subdirectory named 'packages' within the current directory.
-    from packages.utilities import *
-except:
-    try:
-        # If the initial import fails (likely due to differing working directories), 
-        # attempt to import using a relative path.
-        from .utilities import *
-    except:
-        # If importing with a relative path also fails, 
-        # attempt to import directly from the current directory.
-        from utilities import *
+from packages.utilities import *
+# try:
+#     # Attempt to import modules from a subdirectory named 'packages' within the current directory.
+#     from packages.utilities import *
+# except:
+#     try:
+#         # If the initial import fails (likely due to differing working directories), 
+#         # attempt to import using a relative path.
+#         from .utilities import *
+#     except:
+#         # If importing with a relative path also fails, 
+#         # attempt to import directly from the current directory.
+#         from utilities import *
 
 def parse_command():
     """config arguments from command line"""
@@ -34,9 +35,9 @@ def parse_command():
 
     if len(sys.argv) == 1:
         log_error("InvalidParameter", "No arguments provided. Displaying help:\n")
-        self.parser.print_help()
+        parser.print_help()
         sys.exit(1)
-    args = self.parser.parse_args()
+    args = parser.parse_args()
     return vars(args)
     
 
