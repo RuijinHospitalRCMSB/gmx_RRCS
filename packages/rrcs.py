@@ -21,26 +21,26 @@ from concurrent.futures import wait, ALL_COMPLETED
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
-from packages.utilities import *
-from packages.constants import *
-# try:
-#     # Attempt to import modules from a subdirectory named 'packages' within the current directory.
-#     from packages.utilities import *
-#     from packages.constants import *
-# except:
-#     try:
-#         # If the initial import fails (likely due to differing working directories), 
-#         # attempt to import using a relative path.
-#         from .utilities import *
-#         from .constants import *
-#     except:
-#         # If importing with a relative path also fails, 
-#         # attempt to import directly from the current directory.
-#         from utilities import *
-#         from constants import *
-# finally:
-#     from utilities import *
-#     from constants import *
+# from packages.utilities import *
+# from packages.constants import *
+try:
+    # Attempt to import modules from a subdirectory named 'packages' within the current directory.
+    from packages.utilities import *
+    from packages.constants import *
+except:
+    try:
+        # If the initial import fails (likely due to differing working directories), 
+        # attempt to import using a relative path.
+        from .utilities import *
+        from .constants import *
+    except:
+        # If importing with a relative path also fails, 
+        # attempt to import directly from the current directory.
+        from utilities import *
+        from constants import *
+finally:
+    from utilities import *
+    from constants import *
 
 
 # configure logging
@@ -407,7 +407,11 @@ class RRCSAnalyzer:
         """
         atoms = list(protein.select_atoms(f"resid {index_i} and segindex {chain_ix} {AND_NOT_H_ATOMS}").ids - 1)
         if atoms:
-            res_name = THREE_TO_ONE_LETTER.get(protein.atoms[atoms[0]].resname, 'X')
+            try:
+                atom_name = protein.atoms[atoms[0]].resname
+                res_name = THREE_TO_ONE_LETTER.get(atom_name, 'X')
+            except:
+                res_name = 'X'
         else:
             res_name = 'X'
         return res_name
@@ -542,6 +546,7 @@ class RRCSAnalyzer:
         - A dictionary containing residue information.
         """
         pair_chain = defaultdict(dict)
+        # print(list(protein))
         for _ix, _id in chains:
             _id = 'A' if _id == 'SYSTEM' else _id
             pair_residue = defaultdict(dict)
@@ -550,19 +555,25 @@ class RRCSAnalyzer:
                 res_name = ''
                 pair_atom = []
                 for atom_id in atom_ids:
-                    atom = protein.atoms[atom_id]
-                    atom_name = atom.name
-                    # For each atom, attempt to retrieve its occupancy value
                     try:
-                        atom_occu = atom.occupancy
-                    except mda.exceptions.NoDataError as e:
-                        # If a NoDataError exception occurs, this means the atom lacks occupancy information
-                        # In such cases, we set the occupancy atom_occu to a default value of 1.0
-                        atom_occu = 1.0
-                    res_name = atom.resname
-                    pair_atom.append((atom_name, atom_id, atom_occu))
+                        atom = protein.atoms[atom_id]
+                        atom_name = atom.name
+                        # For each atom, attempt to retrieve its occupancy value
+                        try:
+                            atom_occu = atom.occupancy
+                        except mda.exceptions.NoDataError as e:
+                            # If a NoDataError exception occurs, this means the atom lacks occupancy information
+                            # In such cases, we set the occupancy atom_occu to a default value of 1.0
+                            atom_occu = 1.0
+                        res_name = atom.resname
+                        print(f"{res_name};{atom_name};{atom}")
+                        pair_atom.append((atom_name, atom_id, atom_occu))
+                    except:
+                        pass
                 if pair_atom or res_name:
+                    print(res_name)
                     res_name = THREE_TO_ONE_LETTER.get(res_name, 'X')
+                    print(resid, res_name)
                     pair_residue[f'{resid}{res_name}'] = pair_atom
             pair_chain[(_ix, _id)] = pair_residue
         return pair_chain
@@ -635,18 +646,34 @@ class RRCSAnalyzer:
         for chain_ix, chain_id in info_first.keys():
             info_res_first = info_first[(chain_ix, chain_id)]
             info_res_second = info_second[(chain_ix, chain_id)]
+            print(info_first)
+            print(info_second)
+            print(info_res_first)
+            print(info_res_second)
             # Iterate over the residue pairs defined in settings
             for index_i, index_j in settings['res_pairs']:
                 res_i = self.get_residue_name(protein, index_i, chain_ix)
                 res_j = self.get_residue_name(protein, index_j, chain_ix)
+                print(res_i)
+                print(res_j)
+                print("*"*20)
                 info_i = info_res_first[f"{index_i}{res_i}"]
                 info_j = info_res_second[f"{index_j}{res_j}"]
+                print(f"{index_i}{res_i}")
+                print(f"{index_j}{res_j}")
+                print("-"*20)
                 # Determine whether the residue pair is adjacent
                 is_adjacent = self.are_residues_adjacent(index_i, index_j)
                 # Adjust atom coordinates based on occupancy
+                print(info_i)
+                print(info_j)
+                print("-"*20)
                 coord_i = self.adjest_atom_coordinates(is_adjacent, info_i, frame_step)
                 coord_j = self.adjest_atom_coordinates(is_adjacent, info_j, frame_step)
 
+                print(coord_i)
+                print(coord_j)
+                print("#"*20)
                 # Pre-filter contacts
                 if self.prefilter_contacts(coord_i, coord_j):
                     # Calculate distance between residue pairs
@@ -654,6 +681,9 @@ class RRCSAnalyzer:
                     radius_min = settings['radius_min']
                     radius_max = settings['radius_max']
                     rrcs_score = self.compute_rrcs_jit(dist, radius_max, radius_min)
+                    # print(dist)
+                    # print(rrcs_score)
+                    # print("#"*20)
                 else:
                     rrcs_score = 0
                 frame_rrcs.append((f"{chain_id}:{index_i}{res_i}", f"{chain_id}:{index_j}{res_j}", rrcs_score))
