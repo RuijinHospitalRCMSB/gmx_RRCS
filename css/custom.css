@@ -54,6 +54,40 @@ pre code {
 
 /* Icon styling */
 .section-icon {
-    margin-right: 0.5rem;
+    margin-right: 0.75rem;
+    font-size: 1.5rem;
+    vertical-align: middle;
+    opacity: 0.8;
+}
+
+h2 .section-icon {
     color: #0d6efd;
+}
+
+/* Specific icons adjustments */
+.fa-info-circle.section-icon {
+    font-size: 1.4rem;
+}
+
+.fa-download.section-icon {
+    font-size: 1.3rem;
+}
+
+.fa-terminal.section-icon {
+    font-size: 1.2rem;
+}
+
+.fa-file-code.section-icon {
+    font-size: 1.3rem;
+}
+
+.fa-desktop.section-icon {
+    font-size: 1.4rem;
+}
+
+/* Align section headers */
+h2 {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
 } 
