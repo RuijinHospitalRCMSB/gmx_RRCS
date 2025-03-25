@@ -55,7 +55,7 @@ pre code {
 /* Icon styling */
 .section-icon {
     margin-right: 0.75rem;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     vertical-align: middle;
     opacity: 0.8;
 }
@@ -66,23 +66,23 @@ h2 .section-icon {
 
 /* Specific icons adjustments */
 .fa-info-circle.section-icon {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
 }
 
 .fa-download.section-icon {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
 }
 
 .fa-terminal.section-icon {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .fa-file-code.section-icon {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
 }
 
 .fa-desktop.section-icon {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
 }
 
 /* Align section headers */
