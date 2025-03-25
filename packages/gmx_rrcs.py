@@ -105,26 +105,27 @@ class ResidueCombinePairs:
             basic_settings (dict): A dictionary containing basic settings.
         """
         self.basic_settings = basic_settings
-        self.res_pair_set = set()
+        self.res_pair_set = []
 
-    def read_file(self):
+    def parse_pair_file(self):
         """Read and parse the index file, populate res_pair_set."""
-        res_file = self.basic_settings["res_file"]
-        if os.path.exists(res_file):
-            with open(res_file, 'r') as f:
-                lines = f.readlines()
-            lines = self.clear_lines(lines)
-            if len(lines) == 0:
-                log_warning(
-                    "InputFileWarning", 
-                    "The ResidueIndex file is empty. All residue pairs will be processed, which may take a considerable amount of time."
-                    )
-                self.res_pair_set = self.combine_all_residues()
-            else:
-                for line in lines:
-                    self.res_pair_set.update(self.parse_line(line))
-        else:
-            log_warning(
+        try:
+            res_file = self.basic_settings["res_file"]
+            if os.path.exists(res_file):
+                with open(res_file, 'r') as f:
+                    lines = f.readlines()
+                lines = self.clear_lines(lines)
+                if len(lines) == 0:
+                    log_warning(
+                        "InputFileWarning", 
+                        "The ResidueIndex file is empty. All residue pairs will be processed, which may take a considerable amount of time."
+                        )
+                    self.res_pair_set = self.combine_all_residues()
+                else:
+                    for line in lines:
+                        self.res_pair_set.extend(self.parse_line(line))
+        except:
+            log_error(
                 "InputFileWarning", 
                 "The ResidueIndex file does not exist. All residue pairs will be processed, which may take a considerable amount of time."
                 )
@@ -132,12 +133,7 @@ class ResidueCombinePairs:
             
     def clear_lines(self, lines):
         """Clear the lines in the ResidueIndex file."""
-        new_lines = []
-        for line in lines:
-            line = line.strip()
-            if line:  # Check if line is not empty
-                new_lines.append(line)
-        return new_lines
+        return [line.strip() for line in lines if line.strip()]
 
     def parse_line(self, line):
         """
@@ -149,14 +145,18 @@ class ResidueCombinePairs:
         Returns:
             tuple: The result of the parsing.
         """
-        line = line.strip().split(";")[0].strip() # Remove comments
-        # If the line consists only of alphanumeric characters, it is processed as a special type of line
-        if is_alnum_space(line):
-            return self.parse_other_line(line)
-        # If the line contains the '$' symbol, it is processed as a standard type of line
-        elif '$' in line:
-            return self.parse_stand_line(line)
-        else:
+        try:
+            line = line.strip().split(";")[0].strip() # Remove comments
+            # If the line consists only of alphanumeric characters, it is processed as a special type of line
+            if is_alnum_space(line):
+                return self.parse_other_line(line)
+            # If the line contains the '$' symbol, it is processed as a standard type of line
+            elif '$' in line:
+                assert line.count('$') == 1, ResidueIndexError
+                return self.parse_stand_line(line)
+            else:
+                assert False, ResidueIndexError
+        except:
             log_error(
                 "InputFileError", 
                 "The --res_file you entered contains illegal characters, please ensure that your delimiter is '$'."
@@ -169,31 +169,45 @@ class ResidueCombinePairs:
         for part in parts:
             part = part.strip()  # Remove leading/trailing whitespaces
             if part:  # Check if part is not empty
-                res_selc = self._parse_res_list(part, self.basic_settings['res_num'])
-                res_pair_list.append(res_selc)
+                res_select = self._parse_res_list(part)
+                res_pair_list.append(res_select)
             else:
                 raise ResidueIndexError
-        assert len(res_pair_list) == 2, ResidueIndexError
-        return set(itertools.product(*res_pair_list))
+        return list(itertools.product(*res_pair_list))
     
     def parse_other_line(self, line):
         """Parse lines not containing with '$', generating all possible combinations of residue pairs."""
-        res_selc = self._parse_res_list(line.strip(), self.basic_settings['res_num'])
-        return set(itertools.combinations(sorted(res_selc), 2))
+        res_selc = self._parse_res_list(line.strip())
+        return list(itertools.combinations(sorted(res_selc), 2))
 
     @staticmethod
-    def _parse_res_list(res_list_str, res_num):
+    def _parse_res_list(res_list_str):
         """Parse a residue list from a string, supporting range notation."""
-        res_selc = []
-        for res in res_list_str.split():
-            if '-' in res:
-                start, end = map(int, res.split('-'))
-                res_selc.extend(range(start, end + 1))
+        try:
+            parse_results = []
+            res_list_str = res_list_str.strip()
+            # get chain ID
+            if ":" in res_list_str:
+                items = res_list_str.split(":")
+                assert len(items) == 2, ResidueIndexError
+                chain = items[0].strip()
+                line_str = items[1].strip()
             else:
-                res_selc.append(int(res))
-        if 'all' in res_list_str:
-            res_selc = list(range(1, res_num + 1))
-        return set(res_selc)
+                chain = "A" # default chain ID is "A"
+                line_str = res_list_str
+            # get residue ID
+            for res in line_str.split():
+                if '-' in res:
+                    start, end = map(int, res.split('-'))
+                    parse_results.extend(range(start, end + 1))
+                else:
+                    parse_results.append(int(res))
+            return [f'{chain}:{_id}' for _id in set(parse_results)]
+        except Exception as e:
+            log_error(
+                "InputFileError", 
+                f"The --res_file you entered contains illegal characters, please ensure that your delimiter is '$'."
+                )
     
     def combine_all_residues(self):
         """
@@ -216,8 +230,8 @@ class ResidueCombinePairs:
         """
         protein = self.basic_settings['protein']
         # Extract resid values from residues
-        residues = [res.resid for res in protein.residues]
-        return set(itertools.combinations(residues, r=2))
+        residues = [f"A:{res.resid}" for res in protein.residues]
+        return list(itertools.combinations(residues, r=2))
 
     def get_res_pairs(self):
         """Retrieve the parsed set of residue pairs."""
@@ -277,7 +291,8 @@ class UniverseInitializer:
         # Instantiate the Universe object with topology and trajectory file paths
         self.basic['md_traj'] = Universe(self.basic['top_file'], self.basic['traj_file'])
         # Store the number of residues in the universe into the basic dictionary
-        self.basic['protein'] = self.basic['md_traj'].select_atoms('protein')
+        #self.basic['protein'] = self.basic['md_traj'].select_atoms('protein')
+        self.basic['protein'] = self.basic['md_traj'].select_atoms('protein or nucleic or not (resname SOL CL NA K CA MG)')
         self.basic['res_num'] = len(self.basic['protein'].residues)
         logging.info(f"Topology file contains {self.basic['res_num']} residues.")
 
@@ -288,7 +303,7 @@ class UniverseInitializer:
         logging.info(f"Trajectory file contains {self.basic['n_traj_steps']} frames.")
 
         parser = ResidueCombinePairs(self.basic)
-        parser.read_file()
+        parser.parse_pair_file()
         self.basic["res_pairs"] = parser.get_res_pairs()
 
     def calculate_time_min(self):
@@ -344,14 +359,14 @@ class UniverseInitializer:
                 "TooFewFrames",
                 f"The step size of {self.basic['freq_step']} ps exceeds the time interval of {self.basic['end_time'] - self.basic['begin_time']} ps.")
 
-    def get_chain(self):
-        """
-        Retrieves the chain information from the trajectory.
-        """
-        chains = []
-        for chain in self.basic["protein"].segments:
-            chains.append((chain.segindex, chain.segid))
-        self.basic['traj_chains'] = chains
+    # def get_chain(self):
+    #     """
+    #     Retrieves the chain information from the trajectory.
+    #     """
+    #     chains = []
+    #     for chain in self.basic["protein"].segments:
+    #         chains.append((chain.segindex, chain.segid))
+    #     self.basic['traj_chains'] = chains
 
     def run(self):
         """
@@ -374,7 +389,7 @@ class UniverseInitializer:
         # Validate the time interval configuration
         self.check_time_interval()
         # Get chains from trajectory
-        self.get_chain()
+        # self.get_chain()
 
 
 @timing_decorator
@@ -630,7 +645,7 @@ class RRCSAnalyzer:
         Returns:
         - Boolean: True if the residues are neighbors within the specified distance, False otherwise.
         """
-        return abs(index_i - index_j) < MAX_INDEX_DIFFERENCE_FOR_NEIGHBORS
+        return abs(int(index_i) - int(index_j)) < MAX_INDEX_DIFFERENCE_FOR_NEIGHBORS
 
 
     @staticmethod
@@ -736,7 +751,7 @@ class RRCSAnalyzer:
         return np.sum(scores)
 
 
-    def get_residue_info(self, protein, chains, residues):
+    def get_residue_info(self, protein, residues):
         """
         Retrieve residue information from the universe.
         
@@ -746,32 +761,26 @@ class RRCSAnalyzer:
         Returns:
         - A dictionary containing residue information.
         """
-        pair_chain = defaultdict(dict)
-        for _ix, _id in chains:
-            _id = 'A' if _id == 'SYSTEM' else _id
-            pair_residue = defaultdict(dict)
-            for resid in residues:
-                atom_ids = list(protein.select_atoms(f"resid {resid} and segindex {_ix} {AND_NOT_H_ATOMS}").ids - 1)
-                res_name = ''
-                pair_atom = []
-                for atom_id in atom_ids:
-                    atom = protein.atoms[atom_id]
-                    atom_name = atom.name
-                    # For each atom, attempt to retrieve its occupancy value
-                    try:
-                        atom_occu = atom.occupancy
-                    except mda.exceptions.NoDataError as e:
-                        # If a NoDataError exception occurs, this means the atom lacks occupancy information
-                        # In such cases, we set the occupancy atom_occu to a default value of 1.0
-                        atom_occu = 1.0
-                    res_name = atom.resname
-                    pair_atom.append((atom_name, atom_id, atom_occu))
-                if pair_atom or res_name:
-                    res_name = THREE_TO_ONE_LETTER.get(res_name, 'X')
-                    pair_residue[f'{resid}{res_name}'] = pair_atom
-            pair_chain[(_ix, _id)] = pair_residue
-        return pair_chain
-
+        pair_residue = []
+        for resid in residues:
+            chain, resid = resid.split(":")
+            atom_ids = list(protein.select_atoms(f"resid {resid} and segid {chain} {AND_NOT_H_ATOMS}").ids - 1)
+            res_name = ''
+            pair_atom = []
+            for atom_id in atom_ids:
+                atom = protein.atoms[atom_id]
+                atom_name = atom.name
+                # For each atom, attempt to retrieve its occupancy value
+                try:
+                    atom_occu = atom.occupancy
+                except mda.exceptions.NoDataError as e:
+                    atom_occu = 1.0
+                res_name = atom.resname
+                pair_atom.append((atom_name, atom_id, atom_occu))
+            if pair_atom or res_name:
+                # res_name = THREE_TO_ONE_LETTER.get(res_name, 'X')
+                pair_residue.append(((chain, resid, res_name), pair_atom))
+        return pair_residue
 
     def load_residues(self, res_pairs):
         """
@@ -794,15 +803,12 @@ class RRCSAnalyzer:
         if not all(isinstance(pair, tuple) and len(pair) == 2 for pair in res_pairs):
             logging.error("Each element in res_pairs must be a tuple of length 2")
         
-        member_first = set()
-        member_second = set()
-        
-        for pair in res_pairs:
-            member_first.add(pair[0])
-            member_second.add(pair[1])
-        member_first = sorted(member_first)
-        member_second = sorted(member_second)
+        member_first = []
+        member_second = []
 
+        for s1, s2 in sorted(res_pairs, key=lambda x:x[0]):
+            member_first.append(s1)
+            member_second.append(s2)
         return member_first, member_second
 
 
@@ -839,31 +845,37 @@ class RRCSAnalyzer:
         frame_rrcs = []
 
         # Iterate over all chains and residues information in the first model
-        for chain_ix, chain_id in info_first.keys():
-            info_res_first = info_first[(chain_ix, chain_id)]
-            info_res_second = info_second[(chain_ix, chain_id)]
-            # Iterate over the residue pairs defined in settings
-            for index_i, index_j in settings['res_pairs']:
-                res_i = self.get_residue_name(protein, index_i, chain_ix)
-                res_j = self.get_residue_name(protein, index_j, chain_ix)
-                info_i = info_res_first[f"{index_i}{res_i}"]
-                info_j = info_res_second[f"{index_j}{res_j}"]
-                # Determine whether the residue pair is adjacent
-                is_adjacent = self.are_residues_adjacent(index_i, index_j)
-                # Adjust atom coordinates based on occupancy
-                coord_i = self.adjest_atom_coordinates(is_adjacent, info_i, frame_step)
-                coord_j = self.adjest_atom_coordinates(is_adjacent, info_j, frame_step)
+        # key_i = (chain_ix, resid_ix, resname_ix)
+        for i in range(len(info_first)):
+            key_i, info_i = info_first[i]
+            key_j, info_j = info_second[i]
+            # info_i = info_first[key_i]
+            # info_j = info_second[key_j]
+            chain_i, resid_i, resname_i = key_i
+            chain_j, resid_j, resname_j = key_j
+            # Determine whether the residue pair is adjacent
+            if chain_i == chain_j:
+                is_adjacent = self.are_residues_adjacent(resid_i, resid_j)
+            else:
+                is_adjacent = False
+            # Adjust atom coordinates based on occupancy
+            coord_i = self.adjest_atom_coordinates(is_adjacent, info_i, frame_step)
+            coord_j = self.adjest_atom_coordinates(is_adjacent, info_j, frame_step)
 
-                # Pre-filter contacts
-                if self.prefilter_contacts(coord_i, coord_j):
-                    # Calculate distance between residue pairs
-                    dist = self.get_distances(coord_i, coord_j)
-                    radius_min = settings['radius_min']
-                    radius_max = settings['radius_max']
-                    rrcs_score = self.compute_rrcs_jit(dist, radius_max, radius_min)
-                else:
-                    rrcs_score = 0
-                frame_rrcs.append((f"{chain_id}:{index_i}{res_i}", f"{chain_id}:{index_j}{res_j}", rrcs_score))
+            # Pre-filter contacts
+            if self.prefilter_contacts(coord_i, coord_j):
+                # Calculate distance between residue pairs
+                dist = self.get_distances(coord_i, coord_j)
+                radius_min = settings['radius_min']
+                radius_max = settings['radius_max']
+                rrcs_score = self.compute_rrcs_jit(dist, radius_max, radius_min)
+            else:
+                rrcs_score = 0
+            frame_rrcs.append((
+                f"{chain_i}:{resid_i}{resname_i}", 
+                f"{chain_j}:{resid_j}{resname_j}", 
+                rrcs_score
+                ))
         return frame_count, frame_rrcs
 
     @staticmethod
@@ -939,8 +951,8 @@ class RRCSAnalyzer:
         # Load the residues of interest based on the residue pair configuration
         member_first, member_second = self.load_residues(basic_settings['res_pairs'])
 
-        info_first = self.get_residue_info(protein, basic_settings['traj_chains'], member_first)
-        info_second = self.get_residue_info(protein, basic_settings['traj_chains'], member_second)
+        info_first = self.get_residue_info(protein, member_first)
+        info_second = self.get_residue_info(protein, member_second)
 
         # Prepare the arguments for the parallel processing tasks
         args = []
