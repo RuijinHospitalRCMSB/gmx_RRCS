@@ -1,0 +1,59 @@
+/* Custom styles for GMX_RRCS documentation */
+
+/* Header section styling */
+.header-section {
+    background: linear-gradient(to right, #e3f2fd, #bbdefb);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+/* Card components styling */
+.card {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.card-header {
+    font-weight: 500;
+}
+
+/* Code blocks styling */
+pre code {
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.example-blocks pre {
+    margin-bottom: 0.5rem;
+}
+
+/* Table styling */
+.table-responsive {
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
+
+/* Section spacing */
+.installation-section,
+.usage-section,
+.file-formats-section {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+/* Icon styling */
+.section-icon {
+    margin-right: 0.5rem;
+    color: #0d6efd;
+} 
