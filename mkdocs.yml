@@ -1,0 +1,20 @@
+site_name: GMX_RRCS
+repo_url: 'https://github.com/RuijinHospitalRCMSB/gmx_RRCS/settings/pages' 
+nav:
+  - Home: index.md
+  - Getting Started: Tutorials.md
+  # - Usage: usage.md
+  # - Reference:
+  #   - API: api_reference.md
+
+theme:
+  name: mkdocs  
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
