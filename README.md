@@ -97,6 +97,12 @@ If a line does not contain the $ symbol, the residues on that line will pair wit
 15 28 40        ; This line defines residue pairs (15, 28), (15, 40), and (28, 40).
 ```
 
+Additionally, you can specify the chain ID for each residue using the format `chainID:residueID`:
+```
+A:15 $ B:28     ; This line defines a residue pair (A:15, B:28).
+```
+If you do not specify a chain, the default chain is "A".
+
 The residue pair indices file allows multiple lines to define residue pairs:
 ```
 15 $ 28
@@ -104,6 +110,7 @@ The residue pair indices file allows multiple lines to define residue pairs:
 46 $ 55 16
 78 58 $ 98 61
 99-102 $ 293-299
+A:15 $ B:28
 ```
 Regardless of the number of lines, they will all be merged into a single list of residue pairs.
 For gmx_RRCS, the residue pair indices file is not a required parameter. If you do not provide this file, gmx_RRCS will automatically generate a list of all possible residue pairs in the protein, which will significantly increase computation time. Hence, it is generally not recommended.
