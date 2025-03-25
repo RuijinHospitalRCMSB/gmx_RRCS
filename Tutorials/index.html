@@ -3,118 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GMX_RRCS Tutorials</title>
+    <title>GMX_RRCS Tutorial - Complete Guide</title>
     <link rel="stylesheet" href="../css/example.css">
 </head>
 <body>
     <nav class="navbar">
-        <h1>GMX_RRCS Tutorials</h1>
+        <h1>GMX_RRCS Complete Tutorial</h1>
     </nav>
 
     <div class="sidebar">
-        <ul class="sidebar-nav" id="sidebarNav">
-            <li><a href="#intro">Introduction</a></li>
-            <li><a href="#beginner">Beginner Tutorials</a></li>
-            <li><a href="#intermediate">Intermediate Tutorials</a></li>
-            <li><a href="#advanced">Advanced Tutorials</a></li>
-        </ul>
+        <ul class="sidebar-nav" id="sidebarNav"></ul>
     </div>
 
     <div class="main-content">
-        <section id="intro" class="page-header">
-            <h1>GMX_RRCS Tutorials</h1>
-            <p>Explore our comprehensive collection of tutorials to master residue-residue contact analysis with GMX_RRCS. From basic concepts to advanced techniques, we've got you covered.</p>
-        </section>
-
-        <section id="beginner">
-            <h2>Beginner Tutorials</h2>
-            <div class="tutorials-grid">
-                <div class="tutorial-card">
-                    <h3>Getting Started with GMX_RRCS</h3>
-                    <div class="description">Learn the fundamentals of residue contact analysis and set up your first GMX_RRCS project.</div>
-                    <div class="tags">
-                        <span class="tag">Basics</span>
-                        <span class="tag">Installation</span>
-                        <span class="tag">Setup</span>
-                    </div>
-                    <a href="example1.html" class="btn">Start Tutorial</a>
-                </div>
-                
-                <div class="tutorial-card">
-                    <h3>Lysozyme MD Analysis</h3>
-                    <div class="description">Complete walkthrough of analyzing lysozyme MD simulation data with GMX_RRCS.</div>
-                    <div class="tags">
-                        <span class="tag">Lysozyme</span>
-                        <span class="tag">MD Analysis</span>
-                        <span class="tag">Visualization</span>
-                    </div>
-                    <a href="example1.html" class="btn">Start Tutorial</a>
-                </div>
-                
-                <div class="tutorial-card">
-                    <h3>Command Line Interface Basics</h3>
-                    <div class="description">Master the GMX_RRCS command line interface for efficient analysis workflows.</div>
-                    <div class="tags">
-                        <span class="tag">CLI</span>
-                        <span class="tag">Commands</span>
-                        <span class="tag">Parameters</span>
-                    </div>
-                    <a href="#" class="btn">Coming Soon</a>
-                </div>
+        <!-- Introduction -->
+        <section id="intro">
+            <h1>Residue Contact Analysis Guide</h1>
+            <p>This comprehensive tutorial demonstrates residue-residue contact analysis using GMX_RRCS with lysozyme MD simulation data.</p>
+            <div class="note">
+                <strong>Learning Objectives:</strong>
+                <ul>
+                    <li>Master trajectory preprocessing methods</li>
+                    <li>Understand both CLI and Python computation approaches</li>
+                    <li>Learn result visualization techniques</li>
+                </ul>
             </div>
         </section>
 
-        <section id="intermediate">
-            <h2>Intermediate Tutorials</h2>
-            <div class="tutorials-grid">
-                <div class="tutorial-card">
-                    <h3>Python API Deep Dive</h3>
-                    <div class="description">Explore the full capabilities of the GMX_RRCS Python API for custom analysis.</div>
-                    <div class="tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">API</span>
-                        <span class="tag">Scripting</span>
-                    </div>
-                    <a href="#" class="btn">Coming Soon</a>
-                </div>
-                
-                <div class="tutorial-card">
-                    <h3>Advanced Visualization Techniques</h3>
-                    <div class="description">Create publication-quality visualizations of your RRCS analysis results.</div>
-                    <div class="tags">
-                        <span class="tag">Plotting</span>
-                        <span class="tag">Visualization</span>
-                        <span class="tag">Publication</span>
-                    </div>
-                    <a href="#" class="btn">Coming Soon</a>
-                </div>
+        <!-- Prerequisites -->
+        <section id="prerequisites">
+            <h2>Prerequisites</h2>
+            <p>Ensure the following are installed before starting:</p>
+            <ul>
+                <li><strong>GROMACS 2020+</strong> - For MD simulation analysis</li>
+                <li><strong>Python 3.7+</strong> environment:
+                    <pre><code># Install required dependencies
+pip install gmx_rrcs numpy matplotlib MDAnalysis</code></pre>
+                </li>
+                <li>Sample data files:
+                    <ul>
+                        <li><code>md_0_1.xtc</code> - Trajectory file</li>
+                        <li><code>md_0_1.tpr</code> - Topology file</li>
+                        <li><code>Snapshot-0ns.pdb</code> - Initial structure</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Step 1 -->
+        <section id="step1">
+            <h2>Step 1: Trajectory Preprocessing</h2>
+            <p>Extract protein-centered trajectory with 0.1ns intervals:</p>
+            <pre><code>gmx trjconv \
+-f md_0_1.xtc \          # Input trajectory
+-s md_0_1.tpr \          # Topology file
+-fit rot+trans \         # Rotational/translational fitting
+-center \                # Center protein
+-dt 100 \                # 100ps interval (0.1ns)
+-e 300000 \              # End at 300ns
+-o processed.xtc         # Output file</code></pre>
+            <div class="note">
+                <strong>Note:</strong>
+                <ul>
+                    <li>Select "Protein" for both centering and output groups when prompted</li>
+                    <li>Validate output: <code>gmx check -f processed.xtc</code></li>
+                </ul>
             </div>
         </section>
 
-        <section id="advanced">
-            <h2>Advanced Tutorials</h2>
-            <div class="tutorials-grid">
-                <div class="tutorial-card">
-                    <h3>Protein-Ligand Interaction Analysis</h3>
-                    <div class="description">Analyze complex protein-ligand interactions using GMX_RRCS advanced features.</div>
-                    <div class="tags">
-                        <span class="tag">Protein-Ligand</span>
-                        <span class="tag">Binding</span>
-                        <span class="tag">Interactions</span>
-                    </div>
-                    <a href="#" class="btn">Coming Soon</a>
-                </div>
-                
-                <div class="tutorial-card">
-                    <h3>Integrating with Other Tools</h3>
-                    <div class="description">Create powerful analysis pipelines by combining GMX_RRCS with other bioinformatics tools.</div>
-                    <div class="tags">
-                        <span class="tag">Integration</span>
-                        <span class="tag">Workflows</span>
-                        <span class="tag">Pipelines</span>
-                    </div>
-                    <a href="#" class="btn">Coming Soon</a>
-                </div>
+        <!-- Step 2 -->
+        <section id="step2">
+            <h2>Step 2: CLI Computation</h2>
+            <p>Calculate RRCS using command-line interface:</p>
+            <pre><code>gmx_rrcs \
+--top_file Snapshot-0ns.pdb \     # PDB topology
+--traj_file processed.xtc \       # Processed trajectory
+--residue_range 1-129 \          # Analyze all 129 residues
+--r_min 3.23 \                   # Minimum contact distance (Å)
+--r_max 4.63 \                   # Maximum contact distance (Å)
+--output_dir rrcs_results \      # Output directory
+--save_hdf5                      # Save complete dataset</code></pre>
+
+            <table class="param-table">
+                <tr>
+                    <th>Parameter</th>
+                    <th>Description</th>
+                    <th>Recommended</th>
+                </tr>
+                <tr>
+                    <td><code>--r_min</code></td>
+                    <td>Exclude covalent bonds</td>
+                    <td>3.23 Å</td>
+                </tr>
+                <tr>
+                    <td><code>--r_max</code></td>
+                    <td>Capture H-bonds &amp; hydrophobic interactions</td>
+                    <td>4.63 Å</td>
+                </tr>
+                <tr>
+                    <td><code>--cutoff</code></td>
+                    <td>Initial distance filter</td>
+                    <td>10.0 Å</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Step 3 -->
+        <section id="step3">
+            <h2>Step 3: Python API Implementation</h2>
+            <p>Flexible computation using Python script:</p>
+            <pre><code>import gmx_rrcs as gr
+
+# Configure parameters
+params = {
+    "topology_file": "Snapshot-0ns.pdb",  # Path to topology
+    "trajectory_file": "processed.xtc",   # Path to trajectory
+    "output_dir": "rrcs_results",         # Output directory
+    "r_min": 3.23,                       # Minimum distance
+    "r_max": 4.63,                       # Maximum distance
+    "write_xvg": True,                   # Generate time-series
+    "progress_bar": True                 # Show progress indicator
+}
+
+# Execute computation
+gr.compute_intraprotein_rrcs(**params)</code></pre>
+            <div class="note">
+                <strong>Advanced Features:</strong>
+                <ul>
+                    <li>Enable parallel processing with <code>n_workers=4</code></li>
+                    <li>Custom analysis regions using <code>selection</code> parameter</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Visualization -->
+        <section id="visualization">
+            <h2>Result Visualization</h2>
+            
+            <h3>Bar Chart with Scatter Plot</h3>
+            <p>Analyze specific residue (e.g., TRP-123):</p>
+            <pre><code>gr.plot_intraprotein_rrcs_bar_scatter(
+    pdb_file="Snapshot-0ns.pdb",  # Structure file
+    h5_file="rrcs_results.h5",    # Result dataset
+    resid=123,                    # Target residue
+    mean_rrcs_cutoff=0.8,         # Filter threshold
+    output_figure="contacts.png", # Output filename
+    style="seaborn",             # Plot style
+    y_max=25.0                   # Y-axis limit
+)</code></pre>
+
+            <h3>Temporal Density Plot</h3>
+            <p>Visualize contact dynamics over time:</p>
+            <pre><code>gr.plot_intraprotein_rrcs_stacked_area(
+    h5_file="rrcs_results.h5",
+    resid=123,
+    output_figure="dynamics.png",
+    cmap="viridis",              # Color scheme
+    time_bins=10                 # Temporal segments
+)</code></pre>
+        </section>
+
+        <!-- Resources -->
+        <section id="resources">
+            <h2>Additional Resources</h2>
+            <ul>
+                <li>Official Documentation: <a href="https://github.com/RuijinHospitalRCMSB/gmx_RRCS">GitHub Repository</a></li>
+                <li>Simulation Tutorial: <a href="http://www.mdtutorials.com/gmx/lysozyme">GROMACS Lysozyme Tutorial</a></li>
+                <li>Visualization Tools:
+                    <ul>
+                        <li><a href="https://www.ks.uiuc.edu/Research/vmd/">VMD</a></li>
+                        <li><a href="https://www.pymol.org/">PyMOL</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="note">
+                <strong>Technical Support:</strong>
+                <p>Contact <a href="mailto:support@example.com">support@example.com</a> for assistance</p>
             </div>
         </section>
     </div>
