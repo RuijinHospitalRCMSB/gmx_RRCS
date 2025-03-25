@@ -1,11 +1,24 @@
 /* Custom styles for GMX_RRCS documentation */
 
+/* Global text styling */
+body {
+    line-height: 1.8;  /* Increased line height */
+    text-align: justify;  /* Justified text alignment */
+}
+
 /* Header section styling */
 .header-section {
     background: linear-gradient(to right, #e3f2fd, #bbdefb);
-    padding: 2rem;
+    padding: 3rem 2rem;
     border-radius: 10px;
     margin-bottom: 2rem;
+}
+
+.header-section .subtitle {
+    color: #6c757d;
+    max-width: 800px;
+    margin: 1.5rem auto;
+    text-align: center;  /* Center align for header subtitle */
 }
 
 /* Card components styling */
@@ -28,6 +41,7 @@
 pre code {
     border-radius: 5px;
     font-size: 0.9rem;
+    text-align: left;  /* Keep code blocks left-aligned */
 }
 
 .example-blocks pre {
@@ -90,4 +104,73 @@ h2 {
     display: flex;
     align-items: center;
     margin-bottom: 1.5rem;
+}
+
+/* Introduction section styling */
+.introduction-section {
+    padding: 2rem 0;
+    max-width: 1000px;  /* Limit maximum width for better readability */
+    margin: 0 auto;
+}
+
+.algorithm-image {
+    margin: 2rem 0 3rem;  /* Increased margin for better spacing */
+}
+
+.algorithm-image img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #dee2e6;
+    display: block;  /* Center the image */
+    margin: 0 auto;
+}
+
+.key-features h3 {
+    color: #0d6efd;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: left;  /* Left align for headings */
+}
+
+.key-features h4 {
+    color: #495057;
+    font-size: 1.2rem;
+    margin-top: 2rem;  /* Increased top margin */
+    margin-bottom: 1rem;
+    text-align: left;  /* Left align for headings */
+}
+
+.key-features p {
+    margin-bottom: 1.5rem;  /* Increased paragraph spacing */
+}
+
+.workflow-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 1.5rem 0;  /* Added vertical margin */
+}
+
+.workflow-list li {
+    margin-bottom: 1rem;  /* Increased list item spacing */
+    padding-left: 1.5rem;
+    position: relative;
+    text-align: left;  /* Left align for list items */
+}
+
+.workflow-list li:before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #0d6efd;
+}
+
+/* Card body text justification */
+.card-body p {
+    text-align: justify;
+    margin-bottom: 1.2rem;
+}
+
+/* Table cell alignment */
+.table td, .table th {
+    text-align: left;  /* Keep table content left-aligned */
 } 
