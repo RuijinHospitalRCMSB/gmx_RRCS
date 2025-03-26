@@ -78,12 +78,12 @@ window.addEventListener('DOMContentLoaded', () => {
     setTimeout(initializeCodeHighlighting, 100);
 });
 
-// Load the navbar
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('../navbar.html')
-        .then(response => response.text())
-        .then(data => {
-            document.querySelector('body').insertAdjacentHTML('afterbegin', data);
-        })
-        .catch(error => console.error('Error loading navbar:', error));
-}); 
+// // Load the navbar
+// document.addEventListener('DOMContentLoaded', function() {
+//     fetch('../navbar.html')
+//         .then(response => response.text())
+//         .then(data => {
+//             document.querySelector('body').insertAdjacentHTML('afterbegin', data);
+//         })
+//         .catch(error => console.error('Error loading navbar:', error));
+// }); 
