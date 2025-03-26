@@ -3,29 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GMX_RRCS Tutorial</title>
+    <title>GMX_RRCS Tutorial - Complete Guide</title>
+    <!-- 先加载 highlight.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <!-- 然后加载我们的 CSS -->
     <link rel="stylesheet" href="../css/example.css">
 </head>
 <body>
     <nav class="navbar">
-        <h1>GMX_RRCS Complete Tutorial</h1>
+        <h1>GMX_RRCS Tutorial</h1>
     </nav>
 
     <div class="sidebar">
-        <ul class="sidebar-nav" id="sidebarNav"></ul>
+        <ul class="sidebar-nav" id="sidebarNav">
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#step1">Step 1: Data Preparation</a></li>
+            <li><a href="#step2">Step 2: CLI Usage</a></li>
+            <li><a href="#step3">Step 3: Visualization</a></li>
+            <li><a href="#resources">Additional Resources</a></li>
+        </ul>
     </div>
 
     <div class="main-content">
         <!-- Introduction -->
         <section id="intro">
-            <h1>Residue Contact Analysis Guide</h1>
-            <p>This comprehensive tutorial demonstrates residue-residue contact analysis using GMX_RRCS with lysozyme MD simulation data.</p>
-            <div class="note">
-                <strong>Learning Objectives:</strong>
+            <h1>IntroductionTutorial 1: Residue Contact Analysis of Lysozyme MD Analysis</h1>
+            <img src="../image/Lysozyme.png" class="tutorial-image" style="max-width: 80%; margin: 1rem auto; display: block;">
+            <p>This comprehensive tutorial demonstrates residue-residue contact analysis using GMX_RRCS with lysozyme MD simulation data. GMX_RRCS is a tool designed for analyzing residue-residue contact scores (RRCS) in molecular dynamics (MD) simulations. This tutorial will guide you through the entire process, from setting up the simulation data to computing and visualizing RRCS results. By following this guide step by step, you will learn how to efficiently use GMX_RRCS to analyze protein interactions.</p>
+            <!-- 添加 TOC -->
+            <strong>Table of Contents</strong>
+            <div class="table-of-contents">
                 <ul>
-                    <li>Master trajectory preprocessing methods</li>
-                    <li>Understand both CLI and Python computation approaches</li>
-                    <li>Learn result visualization techniques</li>
+                    <li><a href="#intro">Introduction</a></li>
+                    <li><a href="#prerequisites">Prerequisites</a></li>
+                    <li><a href="#step1">Step 1: Preparing the Simulation Data</a></li>
+                    <li><a href="#step2">Step 2: Using the Command Line Interface (CLI)</a></li>
+                    <li><a href="#step3">Step 3: Visualizing RRCS Data</a></li>
+                    <li><a href="#resources">Additional Resources</a></li>
                 </ul>
             </div>
         </section>
@@ -33,27 +48,28 @@
         <!-- Prerequisites -->
         <section id="prerequisites">
             <h2>Prerequisites</h2>
-            <p>Ensure the following are installed before starting:</p>
+            <p>Before starting, ensure you have the following installed:</p>
             <ul>
-                <li><strong>GROMACS 2020+</strong> - For MD simulation analysis</li>
-                <li><strong>Python 3.7+</strong> environment:
+                <li><a href="https://www.gromacs.org/" target="_blank">GROMACS</a> for molecular dynamics simulation.</li>
+                <li><a href="https://github.com/RuijinHospitalRCMSB/gmx_RRCS" target="_blank">GMX_RRCS</a> installed on your system.</li>
+                <li><a href="https://www.python.org/" target="_blank">Python (3.7 or later)</a> with necessary dependencies such as NumPy and Matplotlib.</li>
                     <pre><code># Install required dependencies
 pip install gmx_rrcs numpy matplotlib MDAnalysis</code></pre>
-                </li>
-                <li>Sample data files:
+                <!-- <li>Sample data files:
                     <ul>
                         <li><code>md_0_1.xtc</code> - Trajectory file</li>
                         <li><code>md_0_1.tpr</code> - Topology file</li>
                         <li><code>Snapshot-0ns.pdb</code> - Initial structure</li>
                     </ul>
-                </li>
+                </li> -->
             </ul>
         </section>
 
         <!-- Step 1 -->
         <section id="step1">
-            <h2>Step 1: Trajectory Preprocessing</h2>
-            <p>Extract protein-centered trajectory with 0.1ns intervals:</p>
+            <h2>Step 1: Preparing the Simulation Data</h2>
+            <p>This step is optional and requires you to process the trajectory using GROMACS. However, we strongly recommend thoroughly processing the trajectory before computing RRCS, as this significantly impacts the program's performance and efficiency. This tutorial uses a <a href="http://www.mdtutorials.com/gmx/lysozyme/index.html" target="_blank">classic GROMACS lysozyme MD case</a> to demonstrate RRCS analysis.</p>
+            <p>After running the simulation, you will obtain an XTC file containing trajectory data. To extract a protein-only trajectory with a time step of 0.1 ns over 300 ns, run:</p>
             <pre><code>gmx trjconv \
 -f md_0_1.xtc \          # Input trajectory
 -s md_0_1.tpr \          # Topology file
@@ -73,16 +89,25 @@ pip install gmx_rrcs numpy matplotlib MDAnalysis</code></pre>
 
         <!-- Step 2 -->
         <section id="step2">
-            <h2>Step 2: CLI Computation</h2>
-            <p>Calculate RRCS using command-line interface:</p>
+            <h2>Step 2: Using the Command Line Interface (CLI)</h2>
+            <p>To compute RRCS, use the following command:</p>
             <pre><code>gmx_rrcs \
 --top_file Snapshot-0ns.pdb \     # PDB topology
 --traj_file processed.xtc \       # Processed trajectory
---residue_range 1-129 \          # Analyze all 129 residues
---r_min 3.23 \                   # Minimum contact distance (Å)
---r_max 4.63 \                   # Maximum contact distance (Å)
---output_dir rrcs_results \      # Output directory
---save_hdf5                      # Save complete dataset</code></pre>
+--residue_range 1-129 \           # Analyze all 129 residues
+--r_min 3.23 \                    # Minimum contact distance (Å)
+--r_max 4.63 \                    # Maximum contact distance (Å)
+--output_dir rrcs_results \       # Output directory
+--save_hdf5                       # Save complete dataset</code></pre>
+            <div class="note">
+                <strong>Note:</strong>
+                <p>This process will generate a folder output_rrcs_intraprotein containing:</p>
+                <ul>
+                    <li>rrcs_results_intraprotein.h5: RRCS data for all residue pairs.</li>
+                    <li>.xvg files: Time-dependent RRCS data for visualization.</li>
+                    <li>Validate output: <code>gmx check -f processed.xtc</code></li>
+                </ul>
+            </div>
 
             <table class="param-table">
                 <tr>
@@ -110,8 +135,9 @@ pip install gmx_rrcs numpy matplotlib MDAnalysis</code></pre>
 
         <!-- Step 3 -->
         <section id="step3">
-            <h2>Step 3: Python API Implementation</h2>
-            <p>Flexible computation using Python script:</p>
+            <h2>Step 3: Visualizing RRCS Data</h2>
+            <strong>Bar Chart + Scatter Plot</strong>
+            <p>To visualize RRCS for a specific residue (e.g., residue 123W), use:</p>
             <pre><code>import gmx_rrcs as gr
 
 # Configure parameters
@@ -126,41 +152,55 @@ params = {
 }
 
 # Execute computation
-gr.compute_intraprotein_rrcs(**params)</code></pre>
-            <div class="note">
-                <strong>Advanced Features:</strong>
-                <ul>
-                    <li>Enable parallel processing with <code>n_workers=4</code></li>
-                    <li>Custom analysis regions using <code>selection</code> parameter</li>
-                </ul>
-            </div>
-        </section>
+# Define input files and parameters
+gr.compute_intraprotein_rrcs(**params)
+# The original protein structure file
+pdb_file = "Snapshot-0ns.pdb"  
+# The computed RRCS data file
+h5_file = "output_rrcs_intraprotein/rrcs_results_intraprotein.h5" 
 
-        <!-- Visualization -->
-        <section id="visualization">
-            <h2>Result Visualization</h2>
-            
-            <h3>Bar Chart with Scatter Plot</h3>
-            <p>Analyze specific residue (e.g., TRP-123):</p>
-            <pre><code>gr.plot_intraprotein_rrcs_bar_scatter(
-    pdb_file="Snapshot-0ns.pdb",  # Structure file
-    h5_file="rrcs_results.h5",    # Result dataset
-    resid=123,                    # Target residue
-    mean_rrcs_cutoff=0.8,         # Filter threshold
-    output_figure="contacts.png", # Output filename
-    style="seaborn",             # Plot style
-    y_max=25.0                   # Y-axis limit
-)</code></pre>
+# Residue number of interest
+resid = 123  
+# Output figure filename
+out_bar_figure = "Filtered_bar_single_protein.eps"
 
-            <h3>Temporal Density Plot</h3>
-            <p>Visualize contact dynamics over time:</p>
-            <pre><code>gr.plot_intraprotein_rrcs_stacked_area(
-    h5_file="rrcs_results.h5",
-    resid=123,
-    output_figure="dynamics.png",
-    cmap="viridis",              # Color scheme
-    time_bins=10                 # Temporal segments
+# Generate a bar chart with scatter overlay
+gr.plot_intraprotein_rrcs_bar_scatter(
+    pdb_file=pdb_file,
+    h5_file=h5_file,
+    bt=0.0,
+    et=300000.0,
+    mean_rrcs_cutoff=0.8,  # Minimum RRCS threshold for visualization
+    resid=resid,
+    output_figure=out_bar_figure,
+    y_max=25.0  # Maximum y-axis value for visualization
 )</code></pre>
+<p>The code above will generate a bar chart with scatter overlay showing RRCS scores:</p>
+
+<img src="../image/bar.png" class="tutorial-image" style="max-width: 100%; margin-top: 0.5rem 0; margin-bottom: 1rem 0;">
+
+<p>This will generate a bar chart showing RRCS scores.</p>
+<strong>Density Stack Plot</strong>
+<p>To analyze RRCS dynamics over time:</p>
+<pre><code>
+# Define output figure filename
+out_density_figure = "Filtered_density_toge_single_protein.png"
+
+# Generate a density plot showing RRCS changes over time
+gr.plot_intraprotein_rrcs_stacked_area(
+    pdb_file=pdb_file,
+    h5_file=h5_file,
+    bt=0.0,
+    et=300000.0,
+    mean_rrcs_cutoff=0.8,
+    resid=resid,
+    output_figure=out_density_figure
+)
+</code></pre>
+<p>The code above will generate a density stack plot showing how RRCS scores change over time.</p>
+<img src="../image/density.png" class="tutorial-image" style="max-width: 100%; margin-top: 0.25rem 0; margin-bottom: 1rem 0;">
+
+<p>This will generate a density stack plot.</p>
         </section>
 
         <!-- Resources -->
@@ -171,6 +211,7 @@ gr.compute_intraprotein_rrcs(**params)</code></pre>
                 <li>Simulation Tutorial: <a href="http://www.mdtutorials.com/gmx/lysozyme">GROMACS Lysozyme Tutorial</a></li>
                 <li>Visualization Tools:
                     <ul>
+                        <li><a href="https://www.cgl.ucsf.edu/chimerax/">UCSF ChimeraX</a></li>
                         <li><a href="https://www.ks.uiuc.edu/Research/vmd/">VMD</a></li>
                         <li><a href="https://www.pymol.org/">PyMOL</a></li>
                     </ul>
@@ -178,11 +219,17 @@ gr.compute_intraprotein_rrcs(**params)</code></pre>
             </ul>
             <div class="note">
                 <strong>Technical Support:</strong>
-                <p>Contact <a href="mailto:support@example.com">support@example.com</a> for assistance</p>
+                <p>Contact <a href="">zhouqt@fudan.edu.cn</a> for assistance</p>
             </div>
         </section>
     </div>
 
+    <!-- 先加载 highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    
+    <!-- 然后加载我们的 JS -->
     <script src="../js/example.js"></script>
 </body>
 </html>

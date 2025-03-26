@@ -6,51 +6,27 @@ function generateSidebar() {
     // 清空现有内容
     sidebar.innerHTML = '';
     
-    // 获取当前页面路径
-    const currentPath = window.location.pathname;
-    const isIndexPage = currentPath.includes('index.html') || currentPath.endsWith('/');
-    
-    // 如果是索引页面，使用静态导航
-    if (isIndexPage) {
-        const navItems = [
-            { id: 'intro', text: 'Introduction' },
-            { id: 'beginner', text: 'Beginner Tutorials' },
-            { id: 'intermediate', text: 'Intermediate Tutorials' },
-            { id: 'advanced', text: 'Advanced Tutorials' }
-        ];
+    headings.forEach(heading => {
+        if (!heading.id) return;
         
-        navItems.forEach(item => {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.href = `#${item.id}`;
-            a.textContent = item.text;
-            li.appendChild(a);
-            sidebar.appendChild(li);
-        });
-    } else {
-        // 对于教程页面，动态生成导航
-        headings.forEach(heading => {
-            if (!heading.id) return;
-            
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = `#${heading.id}`;
-            link.textContent = heading.textContent;
-            
-            // 添加基于标题级别的缩进
-            switch(heading.tagName) {
-                case 'H2':
-                    listItem.style.paddingLeft = '20px';
-                    break;
-                case 'H3':
-                    listItem.style.paddingLeft = '40px';
-                    break;
-            }
-            
-            listItem.appendChild(link);
-            sidebar.appendChild(listItem);
-        });
-    }
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        
+        // 添加基于标题级别的缩进
+        switch(heading.tagName) {
+            case 'H2':
+                listItem.style.paddingLeft = '20px';
+                break;
+            case 'H3':
+                listItem.style.paddingLeft = '40px';
+                break;
+        }
+        
+        listItem.appendChild(link);
+        sidebar.appendChild(listItem);
+    });
 }
 
 // Smooth scrolling
@@ -67,7 +43,37 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// 代码高亮函数
+function initializeCodeHighlighting() {
+    if (typeof hljs !== 'undefined') {
+        document.querySelectorAll('pre code').forEach(block => {
+            // 检测代码内容确定语言
+            let language = 'bash';
+            const content = block.textContent || '';
+            
+            if (content.includes('import') || 
+                content.includes('params =') || 
+                content.includes('def ')) {
+                language = 'python';
+            }
+            
+            // 设置语言类
+            block.classList.add(`language-${language}`);
+            block.parentElement.setAttribute('data-language', language);
+            
+            // 应用高亮
+            hljs.highlightElement(block);
+        });
+        console.log('Code highlighting applied');
+    } else {
+        console.warn('highlight.js not loaded');
+    }
+}
+
 // Initialize
 window.addEventListener('DOMContentLoaded', () => {
     generateSidebar();
+    
+    // 等待一小段时间确保 highlight.js 已加载
+    setTimeout(initializeCodeHighlighting, 100);
 }); 
