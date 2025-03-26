@@ -431,3 +431,12 @@ a:visited:hover {
 .no-language::before {
     content: none; /* 隐藏语言类型提示 */
 }
+
+.tutorial-image {
+    max-width: 80%; 
+    margin-top: 1rem 0; 
+    margin-bottom: 1rem 0;
+    display: block; /* 使图片成为块级元素 */
+    margin-left: auto; /* 左边距自动 */
+    margin-right: auto; /* 右边距自动 */
+}
