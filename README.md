@@ -13,6 +13,9 @@ Requires Python version >= 3.9
 
 
 ## Usage
+<p style="color: #007BFF; font-weight: bold; font-size: 1.25em;">
+    For a detailed tutorial, please refer to <a href="https://ruijinhospitalrcmsb.github.io/gmx_RRCS/" style="color: #FF5733; text-decoration: underline;">here</a>.
+</p>
 For help information, execute the script with the following command:
 ```bash
 gmx_RRCS --help
