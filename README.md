@@ -14,6 +14,7 @@ Requires Python version >= 3.9
 
 ## Usage
 **[For a detailed tutorial, please refer to here](https://ruijinhospitalrcmsb.github.io/gmx_RRCS/)**
+
 For help information, execute the script with the following command:
 ```bash
 gmx_RRCS --help
