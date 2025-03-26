@@ -76,4 +76,14 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // 等待一小段时间确保 highlight.js 已加载
     setTimeout(initializeCodeHighlighting, 100);
+});
+
+// Load the navbar
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('../navbar.html')
+        .then(response => response.text())
+        .then(data => {
+            document.querySelector('body').insertAdjacentHTML('afterbegin', data);
+        })
+        .catch(error => console.error('Error loading navbar:', error));
 }); 
