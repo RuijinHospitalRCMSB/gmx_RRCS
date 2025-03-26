@@ -75,8 +75,6 @@ function initializeCodeHighlighting() {
 // Initialize
 window.addEventListener('DOMContentLoaded', () => {
     generateSidebar();
-    
-    // 等待一小段时间确保 highlight.js 已加载
     setTimeout(initializeCodeHighlighting, 100);
 });
 
