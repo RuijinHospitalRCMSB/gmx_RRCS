@@ -29,10 +29,10 @@ body {
     position: fixed;
     top: 60px;
     left: 0;
-    width: 250px;
-    height: 100%;
+    width: 10%;
+    /* height: 100%; */
     background-color: #f8f9fa;
-    padding: 2rem 1rem;
+    padding: 1rem 1rem;
     overflow-y: auto;
 }
 
@@ -68,7 +68,7 @@ body {
     margin: 1rem 0 2rem;
     border: 1px solid #e9ecef;
     box-shadow: 0 1px 5px rgba(0,0,0,0.05);
-    max-width: 800px;
+    /* max-width: 800px; */
 }
 
 .table-of-contents h2 {
