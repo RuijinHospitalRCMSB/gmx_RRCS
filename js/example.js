@@ -80,7 +80,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Load the navbar
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('https://ruijinhospitalrcmsb.github.io/navbar.html')
+    fetch('https://ruijinhospitalrcmsb.github.io/gmx_RRCS/navbar.html')
         .then(response => response.text())
         .then(data => {
             document.querySelector('body').insertAdjacentHTML('afterbegin', data);
