@@ -86,6 +86,7 @@ body {
 
 .main-content h1 {
     font-size: 2rem;
+    text-align: center;
 }
 
 .table-of-contents {
