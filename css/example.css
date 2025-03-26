@@ -11,7 +11,7 @@ body {
     line-height: 1.6;
 }
 
-.navbar {
+/* .navbar {
     background-color: #35A7E8;
     color: white;
     padding: 1rem;
@@ -45,13 +45,13 @@ body {
 
 .nav-links a:hover {
     text-decoration: underline;
-}
+} */
 
 .sidebar {
     position: fixed;
     /* top: 60px; */
     left: 0;
-    width: 15%;
+    width: 20%;
     height: 100%;
     background-color: #f8f9fa;
     padding: 1rem 1rem;
@@ -78,25 +78,30 @@ body {
 }
 
 .main-content {
-    margin-left: 250px;
-    padding: 0 2.5% 0;
+    background-color: #fefeff;
+    margin-left: 20%;
+    padding: 25px 5% 0%;
     max-width: 60%;
 }
 
+.main-content h1 {
+    font-size: 2rem;
+}
+
 .table-of-contents {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    border-radius: 12px;
+    background-color: #dfe1e2;
+    padding: 0.5rem;
+    border-radius: 15px;
     margin: 1rem 0 2rem;
-    border: 1px solid #e9ecef;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+    border: 1px solid #a5a5a5;
+    box-shadow: 0 1px 5px rgba(35, 35, 35, 0.05);
     /* max-width: 800px; */
 }
 
 .table-of-contents h2 {
     margin-top: 0;
     margin-bottom: 1.5rem;
-    color: #2c3e50;
+    color: #8f9091;
     font-size: 1.2rem;
     font-weight: 600;
     border-bottom: 2px solid #e9ecef;
@@ -421,3 +426,7 @@ a:visited:hover {
     color: white !important;
     border-bottom: none;
 } 
+
+.no-language::before {
+    content: none; /* 隐藏语言类型提示 */
+}

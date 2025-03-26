@@ -63,6 +63,8 @@ function initializeCodeHighlighting() {
             
             // 应用高亮
             hljs.highlightElement(block);
+            // 隐藏语言类型提示
+            block.parentElement.classList.add('no-language');
         });
         console.log('Code highlighting applied');
     } else {
@@ -80,7 +82,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Load the navbar
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('../Tutorials/navbar.html')
+    fetch('../navbar.html')
         .then(response => response.text())
         .then(data => {
             document.querySelector('body').insertAdjacentHTML('afterbegin', data);

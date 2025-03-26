@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<!-- <html lang="en"> -->
+<!-- <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GMX_RRCS Tutorial</title>
-    <!-- 先加载 highlight.js CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
-    <!-- 然后加载我们的 CSS -->
     <link rel="stylesheet" href="../css/example.css">
-</head>
+</head> -->
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>GMX_RRCS Tutorial</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="../css/example.css">
+    </head>
 <body>
-    <!-- <nav class="navbar">
-        <h1>GMX_RRCS Tutorial</h1>
-    </nav> -->
 
-    <div class="sidebar">
+    <!-- <div class="sidebar">
         <ul class="sidebar-nav" id="sidebarNav">
             <li><a href="#intro">Introduction</a></li>
             <li><a href="#prerequisites">Prerequisites</a></li>
@@ -23,13 +26,13 @@
             <li><a href="#step3">Step 3: Visualization</a></li>
             <li><a href="#resources">Additional Resources</a></li>
         </ul>
-    </div>
+    </div> -->
 
     <div class="main-content">
         <!-- Introduction -->
         <section id="intro">
-            <h1>IntroductionTutorial 1: Residue Contact Analysis of Lysozyme MD Analysis</h1>
-            <img src="../image/Lysozyme.png" class="tutorial-image" style="max-width: 80%; margin-top: 1rem 0; margin-bottom: 1rem 0;">
+            <h1>Tutorial 1: Residue Contact Analysis of Lysozyme MD Analysis</h1>
+            <img src="./image/Lysozyme.png" class="tutorial-image" style="max-width: 80%; margin-top: 1rem 0; margin-bottom: 1rem 0;">
             <p>This comprehensive tutorial demonstrates residue-residue contact analysis using GMX_RRCS with lysozyme MD simulation data.GMX_RRCS is a tool designed for analyzing residue-residue contact scores (RRCS) in molecular dynamics (MD) simulations. This tutorial will guide you through the entire process, from setting up the simulation data to computing and visualizing RRCS results. By following this guide step by step, you will learn how to efficiently use GMX_RRCS to analyze protein interactions.</p>
             <!-- 添加 TOC -->
             <strong>Table of Contents</strong>
@@ -177,7 +180,7 @@ gr.plot_intraprotein_rrcs_bar_scatter(
 )</code></pre>
 <p>The code above will generate a bar chart with scatter overlay showing RRCS scores:</p>
 
-<img src="../image/bar.png" class="tutorial-image" style="max-width: 100%; margin-top: 0.5rem 0; margin-bottom: 1rem 0;">
+<img src="./image/bar.png" class="tutorial-image" style="max-width: 100%; margin-top: 0.5rem 0; margin-bottom: 1rem 0;">
 
 <p>This will generate a bar chart showing RRCS scores.</p>
 <strong>Density Stack Plot</strong>
@@ -198,7 +201,7 @@ gr.plot_intraprotein_rrcs_stacked_area(
 )
 </code></pre>
 <p>The code above will generate a density stack plot showing how RRCS scores change over time.</p>
-<img src="../image/density.png" class="tutorial-image" style="max-width: 100%; margin-top: 0.25rem 0; margin-bottom: 1rem 0;">
+<img src="./image/density.png" class="tutorial-image" style="max-width: 100%; margin-top: 0.25rem 0; margin-bottom: 1rem 0;">
 
 <p>This will generate a density stack plot.</p>
         </section>
