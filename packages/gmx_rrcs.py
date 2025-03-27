@@ -200,7 +200,7 @@ class ResidueCombinePairs:
                 if chain not in ori_chains:
                     log_warning(
                         "InputFileWarning", 
-                        "The chain you specified doesn't exist in the system. We'll compute the first chain by default."
+                        f"The chain you specified {chain} doesn't exist in the system. We'll compute the first chain by default."
                         )
                     chain = ori_chains[0]
                 line_str = items[1].strip()
