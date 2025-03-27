@@ -11,7 +11,7 @@ packages/__init__.py
 packages/constants.py
 packages/gmx_rrcs.py
 packages/gmxout2csv.py
-packages/rrcs.py
+packages/plot_line.py
 packages/rrcs_visualizer.py
 packages/utilities.py
 tests/test.py

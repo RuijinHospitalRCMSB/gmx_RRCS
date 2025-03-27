@@ -82,7 +82,7 @@ class ConfigParser:
                                  help="Minimum distance threshold in Ångström, default is 3.23")
         self.parser.add_argument('--radius_max', type=float, default=4.63,
                                  help="Maximum distance threshold in Ångström, default is 4.63")
-        self.parser.add_argument('--version', action='version', version='gmx_RRCS 1.0.2',
+        self.parser.add_argument('--version', action='version', version='gmx_RRCS 1.0.3',
                                  help="Display the current version information")
 
     def parse_arguments(self):
