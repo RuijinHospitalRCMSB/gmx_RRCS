@@ -6,21 +6,10 @@
     <title>GMX_RRCS Tutorial</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
     <link rel="stylesheet" href="./css/example.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-
-    <!-- <div class="sidebar">
-        <ul class="sidebar-nav" id="sidebarNav">
-            <li><a href="#intro">Introduction</a></li>
-            <li><a href="#prerequisites">Prerequisites</a></li>
-            <li><a href="#step1">Step 1: Data Preparation</a></li>
-            <li><a href="#step2">Step 2: CLI Usage</a></li>
-            <li><a href="#step3">Step 3: Visualization</a></li>
-            <li><a href="#resources">Additional Resources</a></li>
-        </ul>
-    </div> -->
-    <div id="sidebarNav"></div>
-
+    <div id="top"></div>
     <div class="main-content">
         <!-- Introduction -->
         <section id="intro">
@@ -34,7 +23,7 @@
                     <li><a href="#intro">Introduction</a></li>
                     <li><a href="#prerequisites">Prerequisites</a></li>
                     <li><a href="#step1">Step 1: Preparing the Simulation Data</a></li>
-                    <li><a href="#step2">Step 2: Using the Command Line Interface (CLI)</a></li>
+                    <li><a href="#step2">Step 2: Computing RRCS</a></li>
                     <li><a href="#step3">Step 3: Visualizing RRCS Data</a></li>
                     <li><a href="#resources">Additional Resources</a></li>
                 </ul>
@@ -42,28 +31,27 @@
         </section>
 
         <!-- Prerequisites -->
-        <section id="prerequisites">
-            <h2>Prerequisites</h2>
+        <section id="prerequisites" class="section-div">
+            <h2>Prerequisites
+                <a href="#top" style="margin-left: 10px; text-decoration: none;">
+                    <i class="fas fa-arrow-up" title="Back to top"></i>
+                </a>
+            </h2>
             <p>Before starting, ensure you have the following installed:</p>
             <ul>
                 <li><a href="https://www.gromacs.org/" target="_blank">GROMACS</a> for molecular dynamics simulation.</li>
                 <li><a href="./index.html#installation" target="_blank">GMX_RRCS</a> installed on your system.</li>
                 <li><a href="https://www.python.org/" target="_blank">Python (3.7 or later)</a> with necessary dependencies such as NumPy and Matplotlib.</li>
-                    <pre><code># Install required dependencies
-pip install gmx_rrcs numpy matplotlib MDAnalysis</code></pre>
-                <!-- <li>Sample data files:
-                    <ul>
-                        <li><code>md_0_1.xtc</code> - Trajectory file</li>
-                        <li><code>md_0_1.tpr</code> - Topology file</li>
-                        <li><code>Snapshot-0ns.pdb</code> - Initial structure</li>
-                    </ul>
-                </li> -->
             </ul>
         </section>
 
         <!-- Step 1 -->
-        <section id="step1">
-            <h2>Step 1: Preparing the Simulation Data</h2>
+        <section id="step1" class="section-div">
+            <h2>Step 1: Preparing the Simulation Data
+                <a href="#top" style="margin-left: 10px; text-decoration: none;">
+                    <i class="fas fa-arrow-up" title="Back to top"></i>
+                </a>
+            </h2>
             <p>This step is optional and requires you to process the trajectory using GROMACS. However, we strongly recommend thoroughly processing the trajectory before computing RRCS, as this significantly impacts the program's performance and efficiency. This tutorial uses a <a href="http://www.mdtutorials.com/gmx/lysozyme/index.html" target="_blank">classic GROMACS lysozyme MD case</a> to demonstrate RRCS analysis.</p>
             <p>After running the simulation, you will obtain an XTC file containing trajectory data. To extract a protein-only trajectory with a time step of 0.1 ns over 300 ns, run:</p>
             <pre><code>echo 2 2 2 | gmx trjconv \
@@ -140,8 +128,12 @@ echo 2 | gmx trjconv \
         </section>
 
         <!-- Step 2 -->
-        <section id="step2">
-            <h2>Step 2: Using the Command Line Interface computing RRCS</h2>
+        <section id="step2" class="section-div">
+            <h2>Step 2: Using the Command Line Interface computing RRCS
+                <a href="#top" style="margin-left: 10px; text-decoration: none;">
+                    <i class="fas fa-arrow-up" title="Back to top"></i>
+                </a>
+            </h2>
             <p>After preprocessing the trajectory, we can now compute Residue-Residue Contact Strength (RRCS) using GMX_RRCS. We assume that GMX_RRCS has already been installed, and you can execute the following command to perform the calculation:</p>
             <pre><code>gmx_RRCS \
 --top_file md_0_1_processed_dump0.gro \      # PDB topology
@@ -180,7 +172,7 @@ echo 2 | gmx trjconv \
                         </p>
                     </li>
                     <li>
-                        Understanding the “SYSTEM” tag:
+                        Understanding the "SYSTEM" tag:
                         <p>
                             In the output file, the <code>SYSTEM</code> tag appears in place of chain identifiers. If the original trajectory and topology files do not contain explicit chain information, GMX_RRCS will default to labeling all residues as belonging to the first chain, denoted as <code>SYSTEM</code>.
                         </p>
@@ -190,8 +182,12 @@ echo 2 | gmx trjconv \
         </section>
 
         <!-- Step 3 -->
-        <section id="step3">
-            <h2>Step 3: Visualizing RRCS Data</h2>
+        <section id="step3" class="section-div">
+            <h2>Step 3: Visualizing RRCS Data
+                <a href="#top" style="margin-left: 10px; text-decoration: none;">
+                    <i class="fas fa-arrow-up" title="Back to top"></i>
+                </a>
+            </h2>
             <p>
                 After completing the RRCS calculation, we will now demonstrate some example analyses. Please note that these are just a few possible use cases of RRCS, and you can tailor the analysis to your specific research objectives.
             </p>
@@ -289,8 +285,12 @@ echo 2 | gmx trjconv \
         </section>
 
         <!-- Resources -->
-        <section id="resources">
-            <h2>Additional Resources</h2>
+        <section id="resources" class="section-div">
+            <h2>Additional Resources
+                <a href="#top" style="margin-left: 10px; text-decoration: none;">
+                    <i class="fas fa-arrow-up" title="Back to top"></i>
+                </a>
+            </h2>
             <ul>
                 <li>Official Documentation: <a href="https://github.com/RuijinHospitalRCMSB/gmx_RRCS">GitHub Repository</a></li>
                 <li>Simulation Tutorial: <a href="http://www.mdtutorials.com/gmx/lysozyme">GROMACS Lysozyme Tutorial</a></li>
@@ -303,8 +303,11 @@ echo 2 | gmx trjconv \
                 </li>
             </ul>
             <div class="note">
-                <strong>Technical Support:</strong>
-                <p>Contact <a href="">zhouqt@fudan.edu.cn</a> for assistance</p>
+                <strong>Contact Us:</strong>
+                <ul>
+                    <li><i class="fa fa-envelope"></i> Contact zhouqt@fudan.edu.cn, Qingtong Zhou (周庆同)</li>
+                    <li><i class="fa fa-envelope"></i> Contact whanwei@foxmail.com, Wei Han (韩伟)</li>
+                </ul>
             </div>
         </section>
     </div>
