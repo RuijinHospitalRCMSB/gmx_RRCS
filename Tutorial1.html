@@ -47,7 +47,7 @@
             <p>Before starting, ensure you have the following installed:</p>
             <ul>
                 <li><a href="https://www.gromacs.org/" target="_blank">GROMACS</a> for molecular dynamics simulation.</li>
-                <li><a href="https://github.com/RuijinHospitalRCMSB/gmx_RRCS" target="_blank">GMX_RRCS</a> installed on your system.</li>
+                <li><a href="./index.html#installation" target="_blank">GMX_RRCS</a> installed on your system.</li>
                 <li><a href="https://www.python.org/" target="_blank">Python (3.7 or later)</a> with necessary dependencies such as NumPy and Matplotlib.</li>
                     <pre><code># Install required dependencies
 pip install gmx_rrcs numpy matplotlib MDAnalysis</code></pre>
@@ -73,8 +73,7 @@ pip install gmx_rrcs numpy matplotlib MDAnalysis</code></pre>
 -center \                 # Center protein
 -dt 100 \                 # 100ps interval (0.1ns)
 -e 300000 \               # End at 300ns
--o md_0_1_processed.xtc   # Output file
-            </code></pre>
+-o md_0_1_processed.xtc   # Output file</code></pre>
             <div class="note">
                 <strong>Note 1:</strong><br/>
                 The command <code>echo 2 2 2</code> is used to pass interactive options to gmx trjconv, eliminating the need for manual input.
@@ -141,48 +140,43 @@ echo 2 | gmx trjconv \
 
         <!-- Step 2 -->
         <section id="step2">
-            <h2>Step 2: Using the Command Line Interface (CLI)</h2>
-            <p>To compute RRCS, use the following command:</p>
-            <pre><code>gmx_rrcs \
---top_file Snapshot-0ns.pdb \     # PDB topology
---traj_file processed.xtc \       # Processed trajectory
---residue_range 1-129 \           # Analyze all 129 residues
---r_min 3.23 \                    # Minimum contact distance (Å)
---r_max 4.63 \                    # Maximum contact distance (Å)
---output_dir rrcs_results \       # Output directory
---save_hdf5                       # Save complete dataset</code></pre>
+            <h2>Step 2: Using the Command Line Interface computing RRCS</h2>
+            <p>After preprocessing the trajectory, we can now compute Residue-Residue Contact Strength (RRCS) using GMX_RRCS. We assume that GMX_RRCS has already been installed, and you can execute the following command to perform the calculation:</p>
+            <pre><code>gmx_RRCS \
+--top_file md_0_1_processed_dump0.gro \      # PDB topology
+--traj_file md_0_1_processed.xtc \           # Preprocessed trajectory file
+--res_file tutorial_1_residue_pair.txt \     # File specifying the residue pairs for RRCS calculation
+--output_dir . \                             # Output directory
+--output_file tutorial_1_rrcs_result.txt \   # Output file(s)
+--num_processes 100                          # Number of processes for parallel computation</code></pre>
             <div class="note">
                 <strong>Note:</strong>
-                <p>This process will generate a folder output_rrcs_intraprotein containing:</p>
                 <ul>
-                    <li>rrcs_results_intraprotein.h5: RRCS data for all residue pairs.</li>
-                    <li>.xvg files: Time-dependent RRCS data for visualization.</li>
-                    <li>Validate output: <code>gmx check -f processed.xtc</code></li>
+                    <li>
+                        Specifying the residue pair file:
+                        <p>
+                            You must specify a file containing the residue pairs for RRCS calculation using the <code>--res_file</code> parameter. For formatting rules, <a href="./index.html#residue-pair"> to this guide</a>.
+                        </p>
+                    </li>
+                    <li>
+                        Output file format:
+                        <p>
+                            The calculated RRCS values will be saved in tutorial_1_rrcs_result.txt, with a format similar to the following:
+                            <pre><code>Frame  Residue1           Residue2           RRCS
+1      SYSTEM:545GLU      SYSTEM:379LYS      6.886982325145175 
+1      SYSTEM:545GLU      SYSTEM:381ILE      0.553182029724121
+2      SYSTEM:545GLU      SYSTEM:379LYS      7.999505819593155
+2      SYSTEM:545GLU      SYSTEM:381ILE      0.2606486456734793</code></pre>
+                        </p>
+                    </li>
+                    <li>
+                        Understanding the “SYSTEM” tag:
+                        <p>
+                            In the output file, the <code>SYSTEM</code> tag appears in place of chain identifiers. If the original trajectory and topology files do not contain explicit chain information, GMX_RRCS will default to labeling all residues as belonging to the first chain, denoted as <code>SYSTEM</code>.
+                        </p>
+                    </li>
                 </ul>
             </div>
-
-            <table class="param-table">
-                <tr>
-                    <th>Parameter</th>
-                    <th>Description</th>
-                    <th>Recommended</th>
-                </tr>
-                <tr>
-                    <td><code>--r_min</code></td>
-                    <td>Exclude covalent bonds</td>
-                    <td>3.23 Å</td>
-                </tr>
-                <tr>
-                    <td><code>--r_max</code></td>
-                    <td>Capture H-bonds &amp; hydrophobic interactions</td>
-                    <td>4.63 Å</td>
-                </tr>
-                <tr>
-                    <td><code>--cutoff</code></td>
-                    <td>Initial distance filter</td>
-                    <td>10.0 Å</td>
-                </tr>
-            </table>
         </section>
 
         <!-- Step 3 -->
