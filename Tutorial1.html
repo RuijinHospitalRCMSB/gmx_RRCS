@@ -72,6 +72,7 @@ pip install gmx_rrcs numpy matplotlib MDAnalysis</code></pre>
 -fit rot+trans \          # Rotational/translational fitting
 -center \                 # Center protein
 -dt 100 \                 # 100ps interval (0.1ns)
+-b 200000 \               # Start at 200ns
 -e 300000 \               # End at 300ns
 -o md_0_1_processed.xtc   # Output file</code></pre>
             <div class="note">
@@ -148,25 +149,34 @@ echo 2 | gmx trjconv \
 --res_file tutorial_1_residue_pair.txt \     # File specifying the residue pairs for RRCS calculation
 --output_dir . \                             # Output directory
 --output_file tutorial_1_rrcs_result.txt \   # Output file(s)
---num_processes 100                          # Number of processes for parallel computation</code></pre>
+--num_processes 100                          # Number of processes for parallel computation
+--filter_threshold 0.0                       # Export results above 0.0 to a specified file</code></pre>
             <div class="note">
                 <strong>Note:</strong>
                 <ul>
                     <li>
                         Specifying the residue pair file:
                         <p>
-                            You must specify a file containing the residue pairs for RRCS calculation using the <code>--res_file</code> parameter. For formatting rules, <a href="./index.html#residue-pair"> to this guide</a>.
+                            You must specify a file containing the residue pairs for RRCS calculation using the <code>--res_file</code> parameter. For formatting rules, <a href="./index.html#residue-pair"> to this guide</a>. The file used in this example, <code>tutorial_1_residue_pair.txt</code>, can be <a href="./data/tutorial_1_residue_pair.txt">downloaded here</a>.
                         </p>
                     </li>
                     <li>
                         Output file format:
                         <p>
                             The calculated RRCS values will be saved in tutorial_1_rrcs_result.txt, with a format similar to the following:
-                            <pre><code>Frame  Residue1           Residue2           RRCS
-1      SYSTEM:545GLU      SYSTEM:379LYS      6.886982325145175 
-1      SYSTEM:545GLU      SYSTEM:381ILE      0.553182029724121
-2      SYSTEM:545GLU      SYSTEM:379LYS      7.999505819593155
-2      SYSTEM:545GLU      SYSTEM:381ILE      0.2606486456734793</code></pre>
+                            <pre><code>Frame  Residue1       Residue2       RRCS                    
+1      SYSTEM:121GLN  SYSTEM:119ASP  0.25705056871686655
+1      SYSTEM:121GLN  SYSTEM:124ILE  1.6024710655212397 
+1      SYSTEM:121GLN  SYSTEM:125ARG  1.1029357705797465 
+1      SYSTEM:121GLN  SYSTEM:24SER   1.9814428533826551 
+1      SYSTEM:121GLN  SYSTEM:25LEU   5.636771638052803  
+1      SYSTEM:121GLN  SYSTEM:26GLY   3.5703242233821317 
+1      SYSTEM:124ILE  SYSTEM:121GLN  1.6024710655212397 
+1      SYSTEM:124ILE  SYSTEM:129LEU  1.8078749656677244 
+...</code></pre>
+                        </p>
+                        <p>
+                            You can <a href="./data/tutorial_1_rrcs_result.txt">download the output file</a> <code>tutorial_1_rrcs_result.txt</code>, and the <a href="./data/tutorial_1_rrcs_result_filter_rrcs_greater_than_0.0.txt">filter result</a> (<code>tutorial_1_rrcs_result_filter_rrcs_greater_than_0.0.txt</code>).
                         </p>
                     </li>
                     <li>
@@ -182,71 +192,42 @@ echo 2 | gmx trjconv \
         <!-- Step 3 -->
         <section id="step3">
             <h2>Step 3: Visualizing RRCS Data</h2>
-            <strong>Bar Chart + Scatter Plot</strong>
-            <p>To visualize RRCS for a specific residue (e.g., residue 123W), use:</p>
-            <pre><code>import gmx_rrcs as gr
-
-# Configure parameters
-params = {
-    "topology_file": "Snapshot-0ns.pdb",  # Path to topology
-    "trajectory_file": "processed.xtc",   # Path to trajectory
-    "output_dir": "rrcs_results",         # Output directory
-    "r_min": 3.23,                       # Minimum distance
-    "r_max": 4.63,                       # Maximum distance
-    "write_xvg": True,                   # Generate time-series
-    "progress_bar": True                 # Show progress indicator
-}
-
-# Execute computation
-# Define input files and parameters
-gr.compute_intraprotein_rrcs(**params)
-# The original protein structure file
-pdb_file = "Snapshot-0ns.pdb"  
-# The computed RRCS data file
-h5_file = "output_rrcs_intraprotein/rrcs_results_intraprotein.h5" 
-
-# Residue number of interest
-resid = 123  
-# Output figure filename
-out_bar_figure = "Filtered_bar_single_protein.eps"
-
-# Generate a bar chart with scatter overlay
-gr.plot_intraprotein_rrcs_bar_scatter(
-    pdb_file=pdb_file,
-    h5_file=h5_file,
-    bt=0.0,
-    et=300000.0,
-    mean_rrcs_cutoff=0.8,  # Minimum RRCS threshold for visualization
-    resid=resid,
-    output_figure=out_bar_figure,
-    y_max=25.0  # Maximum y-axis value for visualization
-)</code></pre>
-<p>The code above will generate a bar chart with scatter overlay showing RRCS scores:</p>
-
-<img src="./image/bar.png" class="tutorial-image" style="max-width: 100%; margin-top: 0.5rem 0; margin-bottom: 1rem 0;">
-
-<p>This will generate a bar chart showing RRCS scores.</p>
-<strong>Density Stack Plot</strong>
-<p>To analyze RRCS dynamics over time:</p>
-<pre><code>
-# Define output figure filename
-out_density_figure = "Filtered_density_toge_single_protein.png"
-
-# Generate a density plot showing RRCS changes over time
-gr.plot_intraprotein_rrcs_stacked_area(
-    pdb_file=pdb_file,
-    h5_file=h5_file,
-    bt=0.0,
-    et=300000.0,
-    mean_rrcs_cutoff=0.8,
-    resid=resid,
-    output_figure=out_density_figure
-)
-</code></pre>
-<p>The code above will generate a density stack plot showing how RRCS scores change over time.</p>
-<img src="./image/density.png" class="tutorial-image" style="max-width: 100%; margin-top: 0.25rem 0; margin-bottom: 1rem 0;">
-
-<p>This will generate a density stack plot.</p>
+            <p>
+                After completing the RRCS calculation, we will now demonstrate some example analyses. Please note that these are just a few possible use cases of RRCS, and you can tailor the analysis to your specific research objectives.
+            </p>
+            <h3>Example 1: Temporal Evolution of RRCS Between Two Residues</h3>
+            <p>
+                In this example, we analyze how the RRCS between Residue <code>PHE34</code> and Residue <code>ARG114</code> changes over time. A line plot is generated to visualize the interaction dynamics between these two residues throughout the simulation. You can generate the RRCS plot using the following command:
+            </p>
+            <pre><code>plot_rrcs_line tutorial_1_rrcs_result.txt tutorial_1_rrcs_result.png SYSTEM:34PHE-SYSTEM:114ARG -w 15</code></pre>
+            <div class="note">
+                <strong>Note:</strong>
+                <ul>
+                    <li>
+                        <code>plot_rrcs_line</code> is a built-in plotting tool in <code>gmx_RRCS</code>, which is automatically installed with <code>gmx_RRCS</code>. If the default tool does not meet your needs, you can <a href="./data/plot_line.py">click here</a> to access the Python source code for further customization.
+                    </li>
+                    <li>
+                        You can run plot_rrcs_line -h to check all available parameters. Notably, <code>SYSTEM:34PHE-SYSTEM:114ARG</code> specifies the residue pair to be analyzed, and you must ensure that tutorial_1_rrcs_result.txt contains data for this residue pair; otherwise, the plot cannot be generated correctly.
+                    </li>
+                </ul>
+            </div>
+            <div> 
+                <p>
+                    After executing the command, you will obtain a line plot that depicts the temporal evolution of RRCS (Example output file: tutorial_1_rrcs_result.png).
+                    <ul>
+                        <li>
+                            X-axis: Represents the frames of the simulation trajectory, indicating different time points in the simulation.
+                        </li>
+                        <li>
+                            Y-axis: Represents RRCS (Relative Residue Contact Strength), which quantifies the strength of interaction between the specified residue pair over time.
+                        </li>
+                    </ul>
+                </p>
+                <img src="./image/tutorial_1_rrcs_line.png" class="tutorial-image" style="max-width: 100%; margin-top: 0.5rem 0; margin-bottom: 1rem 0;">
+                <p>
+                    This plot allows you to observe how the interaction between Residue PHE34 and Residue ARG114 changes over time. You may identify trends such as increasing or decreasing interaction strength and detect stable interaction patterns within the simulation.
+                </p>
+            </div>
         </section>
 
         <!-- Resources -->
