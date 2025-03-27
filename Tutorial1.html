@@ -269,6 +269,23 @@ echo 2 | gmx trjconv \
             <p>
                 Due to this methodological distinction, RRCS captures richer multi-atom interaction information, including transient yet significant dynamic contacts, which the minimum distance metric inherently overlooks, especially in cases involving tight, fluctuating interactions.
             </p>
+            <h3>Example 3: Generating a Bar Chart of the Total RRCS for Specific Residues</h3>
+            <p>
+                In this example, we generate a bar chart displaying the total RRCS of specific residues with all other residues, providing an intuitive visualization of their interaction strength with the surrounding environment. Run the following command:
+            </p>
+            <pre><code>gmx_rrcs_count -i tutorial_1_rrcs_result.txt -o tutorial_1_rrcs_bar.png -r '26,33,34,121,124'</code></pre>
+            <img src="./image/tutorial_1_rrcs_bar.png" class="tutorial-image" style="max-width: 100%; margin-top: 0.5rem 0; margin-bottom: 1rem 0;">
+            <div class="note">
+                <strong>Note:</strong>
+                <ul>
+                    <li>
+                        <code>gmx_rrcs_count</code> is a sub-tool of gmx_RRCS, which is installed automatically with <code>gmx_RRCS</code>. If the default tool does not meet your needs, you can <a href="./data/plot_rrcs_count.py">click here</a> to access the Python source code for further customization.
+                    </li>
+                    <li>
+                        You can check the details of each parameter by running <code>gmx_rrcs_count -h</code>.
+                    </li>
+                </ul>
+            </div>
         </section>
 
         <!-- Resources -->
