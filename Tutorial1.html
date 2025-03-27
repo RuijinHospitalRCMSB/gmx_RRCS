@@ -228,6 +228,47 @@ echo 2 | gmx trjconv \
                     This plot allows you to observe how the interaction between Residue PHE34 and Residue ARG114 changes over time. You may identify trends such as increasing or decreasing interaction strength and detect stable interaction patterns within the simulation.
                 </p>
             </div>
+            <h3>Example 2: Correlation between Mindist and RRCS</h3>
+            <p>
+                In this example, we analyze the correlation between Minimum Distance (Mindist) and Relative Residue Contact Strength (RRCS).
+            </p>
+            <p>
+                First, we create an index file that includes Residues PHE34 and ARG114. After executing the following command, enter <code>2 & r 25</code> and <cord>2 & r 124</cord> to select the respective residues:
+            </p>
+            <pre><code>gmx make_ndx -f md_0_1_processed.tpr -o md_0_1_processed.ndx</code></pre>
+            <p>
+                Next, we use the gmx mindist command to compute the minimum distance between LEU25 and ILE124:
+            </p>
+            <pre><code>echo 10 11 | gmx mindist -f md_0_1_processed.xtc -s md_0_1_processed.tpr -n md_0_1_processed.ndx -od md_0_1_processed_mindist.xvg</code></pre>
+            <div class="note">
+                <strong>Note:</strong>
+                <ul>
+                    <li>
+                        <code>echo 10 11</code> specifies indices 10 and 11, corresponding to LEU25 and ILE124 in the index file md_0_1_processed.ndx.
+                    </li>
+                    <li>
+                        You can click here to <a href="./data/md_0_1_processed.ndx">download</a> the md_0_1_processed.ndx or <a href="./data/md_0_1_processed_mindist.xvg">download</a> md_0_1_processed_mindist.xvg files.
+                    </li>
+                </ul>
+            </div>
+            <p>
+                Next, We plot Mindist (X-axis) against RRCS (Y-axis) to visualize their relationship. It is important to highlight the fundamental methodological differences between RRCS and minimum distance (Mindist):
+            </p>
+            <img src="./image/tutorial_1_rrcs_mindist.svg" class="tutorial-image" style="max-width: 100%; margin-top: 0.5rem 0; margin-bottom: 1rem 0;">
+            <div class="note">
+                <strong>Note:</strong>
+                <ul>
+                    <li>
+                        Minimum Distance (Mindist) considers only the shortest interatomic separation between two residues, making it a single-point measurement.
+                    </li>
+                    <li>
+                        RRCS, on the other hand, integrates contributions from all heavy atoms within a defined cutoff range, providing a cumulative measure of contact strength.
+                    </li>
+                </ul>
+            </div>
+            <p>
+                Due to this methodological distinction, RRCS captures richer multi-atom interaction information, including transient yet significant dynamic contacts, which the minimum distance metric inherently overlooks, especially in cases involving tight, fluctuating interactions.
+            </p>
         </section>
 
         <!-- Resources -->
