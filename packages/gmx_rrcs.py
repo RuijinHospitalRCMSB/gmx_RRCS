@@ -26,6 +26,8 @@ try:
     # Attempt to import modules from a subdirectory named 'packages' within the current directory.
     from packages.utilities import *
     from packages.constants import *
+    from utilities import *
+    from constants import *
 except:
     try:
         # If the initial import fails (likely due to differing working directories), 
@@ -37,9 +39,6 @@ except:
         # attempt to import directly from the current directory.
         from utilities import *
         from constants import *
-# finally:
-#     from utilities import *
-#     from constants import *
 
 
 # configure logging
@@ -72,8 +71,8 @@ class ConfigParser:
                                  help="Time step for analysis, default is 0.1 ps")
         self.parser.add_argument('--plot', action='store_true',
                                  help='Generate a plot if specified (default: False).')
-        self.parser.add_argument('--filter_threshold', type=float, default=3.0,
-                                 help='Choose whether to output the high-scoring results that have been filtered, default is 3.0.')
+        self.parser.add_argument('--filter_threshold', type=float, default=None,
+                                 help='Choose whether to output the high-scoring results that have been filtered, default is None.')
         self.parser.add_argument('--num_processes', type=int, default=None,
                                  help="Number of processes for parallel execution."
                                   "If None, use all available CPU cores. Default is None.")
@@ -86,7 +85,12 @@ class ConfigParser:
 
 
     def parse_arguments(self):
-        """Parses command line arguments and returns them as a dictionary."""
+        """
+        Parses command line arguments and returns them as a dictionary.
+
+        Returns:
+            dict: Parsed command line arguments.
+        """
         if len(sys.argv) == 1:
             log_error("InvalidParameter", "No arguments provided. Displaying help:\n")
             self.parser.print_help()
@@ -106,6 +110,7 @@ class ResidueCombinePairs:
         """
         self.basic_settings = basic_settings
         self.res_pair_set = []
+        self.original_chains = [chain for _ix, chain in basic_settings['traj_chains']]
 
     def parse_pair_file(self):
         """Read and parse the index file, populate res_pair_set."""
@@ -169,7 +174,7 @@ class ResidueCombinePairs:
         for part in parts:
             part = part.strip()  # Remove leading/trailing whitespaces
             if part:  # Check if part is not empty
-                res_select = self._parse_res_list(part)
+                res_select = self._parse_res_list(part, self.original_chains)
                 res_pair_list.append(res_select)
             else:
                 raise ResidueIndexError
@@ -177,11 +182,11 @@ class ResidueCombinePairs:
     
     def parse_other_line(self, line):
         """Parse lines not containing with '$', generating all possible combinations of residue pairs."""
-        res_selc = self._parse_res_list(line.strip())
+        res_selc = self._parse_res_list(line.strip(), self.original_chains)
         return list(itertools.combinations(sorted(res_selc), 2))
 
     @staticmethod
-    def _parse_res_list(res_list_str):
+    def _parse_res_list(res_list_str, ori_chains):
         """Parse a residue list from a string, supporting range notation."""
         try:
             parse_results = []
@@ -191,9 +196,19 @@ class ResidueCombinePairs:
                 items = res_list_str.split(":")
                 assert len(items) == 2, ResidueIndexError
                 chain = items[0].strip()
+                if chain not in ori_chains:
+                    log_warning(
+                        "InputFileWarning", 
+                        "The chain you specified doesn't exist in the system. We'll compute the first chain by default."
+                        )
+                    chain = ori_chains[0]
                 line_str = items[1].strip()
             else:
-                chain = "A" # default chain ID is "A"
+                log_warning(
+                    "InputFileWarning", 
+                    "You haven't specified the chain information, so we'll compute the first chain by default."
+                    )
+                chain = ori_chains[0] # default first chain of protein
                 line_str = res_list_str
             # get residue ID
             for res in line_str.split():
@@ -233,8 +248,19 @@ class ResidueCombinePairs:
         residues = [f"A:{res.resid}" for res in protein.residues]
         return list(itertools.combinations(residues, r=2))
 
-    def get_res_pairs(self):
+    def remove_adjacent_pairs(self):
+        """
+        Removes pairs from self.res_pair_set where the first element of the pair
+        is equal to the second element of another pair.
+        
+        This method iterates through the list of residue pairs and removes any
+        pair (a, b) where a is equal to b of another pair (c, a).
+        """
+        self.res_pair_set = [pair for pair in self.res_pair_set if pair[0] != pair[1]]
+
+    def get_res_pairs(self) -> tuple:
         """Retrieve the parsed set of residue pairs."""
+        self.remove_adjacent_pairs()
         pairs = tuple(sorted(self.res_pair_set))
         logging.info(f"Read {len(pairs)} residue pairs. Proceeding to calculate RRCS between these {len(pairs)} residue pairs.")
         return pairs
@@ -301,6 +327,8 @@ class UniverseInitializer:
 
         self.basic['n_traj_steps'] = self.basic['md_traj'].trajectory.n_frames
         logging.info(f"Trajectory file contains {self.basic['n_traj_steps']} frames.")
+        # Get chains from trajectory
+        self.get_chain()
 
         parser = ResidueCombinePairs(self.basic)
         parser.parse_pair_file()
@@ -359,14 +387,14 @@ class UniverseInitializer:
                 "TooFewFrames",
                 f"The step size of {self.basic['freq_step']} ps exceeds the time interval of {self.basic['end_time'] - self.basic['begin_time']} ps.")
 
-    # def get_chain(self):
-    #     """
-    #     Retrieves the chain information from the trajectory.
-    #     """
-    #     chains = []
-    #     for chain in self.basic["protein"].segments:
-    #         chains.append((chain.segindex, chain.segid))
-    #     self.basic['traj_chains'] = chains
+    def get_chain(self):
+        """
+        Retrieves the chain information from the trajectory.
+        """
+        chains = []
+        for chain in self.basic["protein"].segments:
+            chains.append((chain.segindex, chain.segid))
+        self.basic['traj_chains'] = chains
 
     def run(self):
         """
@@ -388,8 +416,6 @@ class UniverseInitializer:
         self.calculate_time_min()
         # Validate the time interval configuration
         self.check_time_interval()
-        # Get chains from trajectory
-        # self.get_chain()
 
 
 @timing_decorator
@@ -438,11 +464,12 @@ class DataVisualizer:
         logging.info(f"RRCS data is saved to {self.output} file.")
 
         # Construct the file path for the filtered data.
-        filepath = f"{os.path.splitext(self.output)[0]}_filter_rrcs_greater_than_{self.filter_threshold}.txt"
-        filter_outlines.extend(filter_lines)
-        with open(filepath, 'w') as f:
-            f.writelines(filter_outlines)
-        logging.info(f"Filtered RRCS data is saved to the {filepath} file.")
+        if isinstance(self.filter_threshold, float):
+            filepath = f"{os.path.splitext(self.output)[0]}_filter_rrcs_greater_than_{self.filter_threshold}.txt"
+            filter_outlines.extend(filter_lines)
+            with open(filepath, 'w') as f:
+                f.writelines(filter_outlines)
+            logging.info(f"Filtered RRCS data is saved to the {filepath} file.")
 
     def reformat_data_lines(self, rrcs_data):
         """
@@ -462,7 +489,7 @@ class DataVisualizer:
             # Iterate over the RRCS list, each entry is a tuple containing residue identifiers and an RRCS score
             for res1, res2, rrcs_score in rrcs_list:
                 outlines.append((frame, res1, res2, rrcs_score))
-                if rrcs_score > self.filter_threshold:
+                if isinstance(self.filter_threshold, float) and (rrcs_score > self.filter_threshold):
                     filter_outlines.append((frame, res1, res2, rrcs_score))
         outlines = self.pretty_print_table(outlines)
         filter_outlines = self.pretty_print_table(filter_outlines)
@@ -849,8 +876,6 @@ class RRCSAnalyzer:
         for i in range(len(info_first)):
             key_i, info_i = info_first[i]
             key_j, info_j = info_second[i]
-            # info_i = info_first[key_i]
-            # info_j = info_second[key_j]
             chain_i, resid_i, resname_i = key_i
             chain_j, resid_j, resname_j = key_j
             # Determine whether the residue pair is adjacent

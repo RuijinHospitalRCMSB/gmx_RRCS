@@ -37,7 +37,7 @@ def log_error(error_type: str, message: str):
 def log_warning(warning_type: str, message: str):
     """Log and print the warning message."""
     logging.warning(message)
-    print(colored(f"Warning: {warning_type}", "yellow"), message)
+    # print(colored(f"Warning: {warning_type}", "yellow"), message)
 
 
 def is_alnum_space(s):
