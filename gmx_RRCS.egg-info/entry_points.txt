@@ -1,0 +1,4 @@
+[console_scripts]
+gmx_RRCS = packages.gmx_RRCS:main
+gmxout2csv = packages.gmxout2csv:main
+rrcs = packages.rrcs:main

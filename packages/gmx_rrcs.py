@@ -37,9 +37,9 @@ except:
         # attempt to import directly from the current directory.
         from utilities import *
         from constants import *
-finally:
-    from utilities import *
-    from constants import *
+# finally:
+#     from utilities import *
+#     from constants import *
 
 
 # configure logging
