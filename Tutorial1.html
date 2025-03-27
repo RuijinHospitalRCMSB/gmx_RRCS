@@ -26,7 +26,7 @@
         <section id="intro">
             <h1>Tutorial 1: Residue Contact Analysis of Lysozyme MD Analysis</h1>
             <img src="./image/Lysozyme.png" class="tutorial-image">
-            <p>This comprehensive tutorial demonstrates residue-residue contact analysis using GMX_RRCS with lysozyme MD simulation data.GMX_RRCS is a tool designed for analyzing residue-residue contact scores (RRCS) in molecular dynamics (MD) simulations. This tutorial will guide you through the entire process, from setting up the simulation data to computing and visualizing RRCS results. By following this guide step by step, you will learn how to efficiently use GMX_RRCS to analyze protein interactions.</p>
+            <p>This comprehensive tutorial demonstrates residue-residue contact analysis using GMX_RRCS with lysozyme MD simulation data. GMX_RRCS is a tool designed for analyzing residue-residue contact scores (RRCS) in molecular dynamics (MD) simulations. This tutorial will guide you through the entire process, from setting up the simulation data to computing and visualizing RRCS results. By following this guide step by step, you will learn how to efficiently use GMX_RRCS to analyze protein interactions.</p>
             <!-- 添加 TOC -->
             <strong>Table of Contents</strong>
             <div class="table-of-contents">
@@ -66,20 +66,76 @@ pip install gmx_rrcs numpy matplotlib MDAnalysis</code></pre>
             <h2>Step 1: Preparing the Simulation Data</h2>
             <p>This step is optional and requires you to process the trajectory using GROMACS. However, we strongly recommend thoroughly processing the trajectory before computing RRCS, as this significantly impacts the program's performance and efficiency. This tutorial uses a <a href="http://www.mdtutorials.com/gmx/lysozyme/index.html" target="_blank">classic GROMACS lysozyme MD case</a> to demonstrate RRCS analysis.</p>
             <p>After running the simulation, you will obtain an XTC file containing trajectory data. To extract a protein-only trajectory with a time step of 0.1 ns over 300 ns, run:</p>
-            <pre><code>gmx trjconv \
--f md_0_1.xtc \          # Input trajectory
--s md_0_1.tpr \          # Topology file
--fit rot+trans \         # Rotational/translational fitting
--center \                # Center protein
--dt 100 \                # 100ps interval (0.1ns)
--e 300000 \              # End at 300ns
--o processed.xtc         # Output file</code></pre>
+            <pre><code>echo 2 2 2 | gmx trjconv \
+-f md_0_1.xtc \           # Input trajectory
+-s md_0_1.tpr \           # Topology file
+-fit rot+trans \          # Rotational/translational fitting
+-center \                 # Center protein
+-dt 100 \                 # 100ps interval (0.1ns)
+-e 300000 \               # End at 300ns
+-o md_0_1_processed.xtc   # Output file
+            </code></pre>
+            <div class="note">
+                <strong>Note 1:</strong><br/>
+                The command <code>echo 2 2 2</code> is used to pass interactive options to gmx trjconv, eliminating the need for manual input.
+                <ul>
+                    <li>
+                        The first 2 selects the atom group for least squares fitting, which in this case includes all non-hydrogen atoms of the protein.
+                    </li>
+                    <li>
+                        The second 2 specifies the atom group for centering, also choosing all non-hydrogen atoms of the protein to ensure that the trajectory remains centered around this molecule.
+                    </li>
+                    <li>
+                    The third 2 determines the output atom group, meaning the trajectory file will contain only the selected non-hydrogen atoms of the protein.
+                    </li>
+                </ul>
+                This approach allows the command to run automatically, improving efficiency by avoiding interactive selection.
+            </div>
+            <div class="note">
+                <strong>Note 2:</strong>
+                <ul>
+                    <li>
+                        The processed trajectory file <code>md_0_1_processed.xtc</code> has been optimized, reducing its size significantly from 12GB to 12MB.
+                    </li>
+                    <li>
+                        You can <a href="./data/md_0_1_processed.xtc" download>click here to download</a> the processed trajectory file.
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <p>After processing the trajectory, we need to generate a topology file (<code>md_0_1_processed_dump0.gro</code>) that exactly matches the processed trajectory (<code>md_0_1_processed.xtc</code>), ensuring consistency in atom numbers and other key information. Run the following commands:</p>
+            </div>
+            <pre><code>echo 2 | gmx convert-tpr \
+-s md_0_1.tpr \
+-o md_0_1_processed.tpr            # Output a new TPR file that matche the processed trajectory.
+
+echo 2 | gmx trjconv \
+-f md_0_1_processed.xtc \
+-s md_0_1_processed.tpr \
+-o md_0_1_processed_dump0.gro \    # Output the GRO format coordinate file.
+-dump 0                            # Extracts structure information at 0 ps.
+            </code></pre>
             <div class="note">
                 <strong>Note:</strong>
                 <ul>
-                    <li>Select "Protein" for both centering and output groups when prompted</li>
-                    <li>Validate output: <code>gmx check -f processed.xtc</code></li>
+                    <li>
+                        The first command gmx convert-tpr creates a new TPR file (<code>md_0_1_processed.tpr</code>) that matches the processed trajectory, ensuring consistency during analysis.
+                    </li>
+                    <li>
+                        The second command gmx trjconv extracts the coordinates at 0 ps from the trajectory, generating a GRO format structure file (<code>md_0_1_processed_dump0.gro</code>), which can later be converted to PDB for visualization and further analysis.
+                    </li>
+                    <li>
+                        <a href="./data/md_0_1_processed_dump0.gro" download>Click here to download</a> the processed topology file.
+                    </li>
                 </ul>
+            </div>
+            <div>
+                <p>
+                    At this point, we have successfully completed the trajectory preprocessing. The next step is to proceed with GMX_RRCS analysis.
+                </p>
+                <p>
+                    Before moving forward, here's a useful tip: During the preprocessing stage, you can extract only the atomic groups required for the RRCS calculation to optimize efficiency. For example, if you only need to compute RRCS for two specific residues between 100 ns and 200 ns, you can extract only those residues within this time range during preprocessing. This approach significantly reduces the trajectory file size and greatly accelerates the computation process, making the analysis much more efficient.
+                </p>
             </div>
         </section>
 
