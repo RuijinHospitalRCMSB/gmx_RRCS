@@ -1,4 +1,5 @@
 [console_scripts]
 gmx_RRCS = packages.gmx_rrcs:main
+gmx_rrcs_count = packages.plot_rrcs_count:main
 gmxout2csv = packages.gmxout2csv:main
 plot_rrcs_line = packages.plot_line:main
