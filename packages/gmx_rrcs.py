@@ -68,7 +68,7 @@ class ConfigParser:
         self.parser.add_argument('--end_time', type=float, default=9999999.0,
                                  help="End time for calculation in picoseconds, default is 9999999.0")
         self.parser.add_argument('--freq_step', type=float, default=0.1,
-                                 help="Time step for analysis, default is 0.1 ps")
+                                 help="Time step for analysis, default is 0.1 ns")
         self.parser.add_argument('--plot', action='store_true',
                                  help='Generate a plot if specified (default: False).')
         self.parser.add_argument('--filter_threshold', type=float, default=None,
