@@ -11,6 +11,10 @@ pip install gmx-RRCS
 ```
 Requires Python version >= 3.9
 
+## Cite Us
+```bash
+Han W, Chen Z, Wang MW, Zhou Q. gmx_RRCS: A Precision Tool for Detecting Subtle Conformational Dynamics in Molecular Simulations. J Mol Biol. 2025;437(15):169129. doi:10.1016/j.jmb.2025.169129
+```
 
 ## Usage
 **[For a detailed tutorial, please refer to here](https://ruijinhospitalrcmsb.github.io/gmx_RRCS/)**
